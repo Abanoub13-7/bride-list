@@ -294,7 +294,7 @@
       }
       return next;
     } catch (error) {
-      console.error("تعذر تحميل بيانات قائمة العروسة:", error);
+      console.error("تعذر تحميل بيانات Bride List:", error);
       try { localStorage.setItem(`${STORAGE_KEY}.corrupt-${Date.now()}`, raw); } catch (e) { /* ignore */ }
       return makeInitialState();
     }
@@ -434,7 +434,7 @@
       commit(() => { state.categories = state.categories.filter(c => c.id !== id); }, "تعذر حفظ التغيير.");
     },
     exportData() {
-      const out = { ...clone(state), exportedAt: new Date().toISOString(), app: "قائمة العروسة" };
+      const out = { ...clone(state), exportedAt: new Date().toISOString(), app: "Bride List" };
       const img = this.getHeroImage();                    /* لا يفشل التصدير بسبب صورة كبيرة: نتجاوزها إن زادت عن الحد */
       if (img && img.dataUrl.length <= IMAGE_EXPORT_MAX) out.heroImage = img.dataUrl;
       out.tipsDone = Object.keys(this.getTipsDone());

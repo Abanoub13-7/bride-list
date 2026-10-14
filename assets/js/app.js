@@ -10,8 +10,8 @@
   const catStateLabels = { empty: "فارغة", missing: "لم تبدأ", preparing: "قيد التجهيز", complete: "مكتملة" };
   const catStateIcon = { empty: "plus", missing: "notstarted", preparing: "clock", complete: "check" };
   const TONES = ["rose", "beige", "mauve", "sage", "peach", "plum"];
-  const VIEWS = ["dashboard", "categories", "category", "items", "budget", "tips", "settings"];
-  const TITLES = { dashboard: "الرئيسية", categories: "الفئات", category: "تفاصيل الفئة", items: "كل البنود", budget: "الميزانية", tips: "النصائح الذهبية", settings: "الإعدادات" };
+  const VIEWS = ["dashboard", "categories", "category", "items", "budget", "tips", "settings", "about"];
+  const TITLES = { dashboard: "الرئيسية", categories: "الفئات", category: "تفاصيل الفئة", items: "كل البنود", budget: "الميزانية", tips: "النصائح الذهبية", settings: "الإعدادات", about: "عن الموقع" };
 
   let currentView = "dashboard", currentCatId = "";
   let toastTimer;
@@ -47,6 +47,107 @@
   function toast(message, ms = 2800) {
     const el = $("toast"); el.textContent = message; el.classList.add("show");
     clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), ms);
+  }
+
+
+  /* ---------- رحلة الترحيب: بياناتها منفصلة عن القائمة حتى لا تمس بيانات المستخدم ---------- */
+  const WELCOME_KEY = "brideListApp.v1.onboarding";
+  const welcomeState = { step: "intro", tourIndex: 0, selectedImage: null };
+  const WELCOME_TOUR = [
+    { icon: "list", title: "تعرّفي على Bride List", text: "Bride List يساعدكِ على جمع متطلبات تجهيز بيتك في قائمة منظمة، مع متابعة كل بند، الكمية، والسعر بسهولة." },
+    { icon: "grid", title: "الفئات والمشتريات", text: "استعرضي الفئات، افتحي كل قسم، وراجعي المنتجات أو المتطلبات الموجودة فيه، ثم أضيفي أو عدّلي البنود بحسب احتياجك." },
+    { icon: "check", title: "متابعة التجهيزات", text: "تابعي العناصر التي تم شراؤها والعناصر المتبقية، وتتبعّي تقدم كل فئة عبر لوحة المشروع بكل وضوح." },
+    { icon: "wallet", title: "الميزانية", text: "دوّني ميزانيتك الإجمالية ووزعيها على الفئات، وتابعي المبلغ المتبقي والإنفاق التقديري من داخل Bride List." },
+    { icon: "bulb", title: "النصائح الذهبية", text: "استفيدي من نصائح تجهيز العروسة وجداولها وقوائم مراجعتها للمرحلة المناسبة في رحلتك." },
+    { icon: "sparkles", title: "تخصيص تجربتك", text: "عدّلي اسمكِ، وقومي بتعيين صورة يومك الجميل، وغيرّي الإعدادات وفق تفضيلاتك الشخصية داخل التطبيق." }
+  ];
+  function readWelcomeMeta() {
+    try { const value = JSON.parse(localStorage.getItem(WELCOME_KEY) || "{}"); return value && typeof value === "object" ? value : {}; }
+    catch (_) { return {}; }
+  }
+  function writeWelcomeMeta(patch) {
+    try { localStorage.setItem(WELCOME_KEY, JSON.stringify({ ...readWelcomeMeta(), ...patch, updatedAt: new Date().toISOString() })); return true; }
+    catch (_) { toast("تعذر حفظ تفضيل الجولة في المتصفح. بيانات القائمة لم تتأثر.", 4200); return false; }
+  }
+  function welcomeIcon(name) { return `<span class="welcome-illustration"><i data-icon="${name}"></i></span>`; }
+  function welcomeRender() {
+    const content = $("welcomeContent"), actions = $("welcomeActions"), progress = $("welcomeProgress");
+    const profile = state().profile || {};
+    let html = "", buttons = "", pct = 25;
+    if (welcomeState.step === "intro") {
+      pct = 18; html = `${welcomeIcon("heart")}<p class="eyebrow">كل بداية جميلة بتبدأ بخطوة</p><h2 id="welcomeTitle">أهلًا بكِ في Bride List 💍</h2><p>رحلتك لتجهيز بيتك تبدأ هنا! نظّمي احتياجاتك، وتابعي مشترياتك، ووزّعي ميزانيتك بسهولة، واحتفظي بقائمتك في مكان واحد.</p>`;
+      buttons = `<button class="welcome-primary" data-welcome="profile">ابدئي رحلتك <span aria-hidden="true">←</span></button>`;
+    } else if (welcomeState.step === "profile") {
+      pct = 38; html = `${welcomeIcon("heart")}<p class="eyebrow">الخطوة الأولى من 3</p><h2 id="welcomeTitle">تحبي نناديكي بإيه؟</h2><p>اكتبي اسمكِ ليظهر في ترحيب الصفحة الرئيسية. تقدري تسيبي الخانة فاضية وتضيفيه أو تغيريه في أي وقت من الإعدادات.</p><form class="welcome-form" id="welcomeNameForm"><label for="welcomeNameInput">اسم العروسة <span class="optional">(اختياري)</span><input id="welcomeNameInput" type="text" maxlength="60" autocomplete="given-name" placeholder="مثال: نور"></label></form>`;
+      buttons = `<button class="welcome-secondary" data-welcome="intro">رجوع</button><button class="welcome-primary" data-welcome="save-profile">التالي</button>`;
+    } else if (welcomeState.step === "photo") {
+      pct = 58; html = `${welcomeIcon("star")}<p class="eyebrow">الخطوة الثانية من 3</p><h2 id="welcomeTitle">تحبي تضيفي صورة؟</h2><p>اختياري: اختاري صورة تظهر في مساحة «يومك بيقرب» على الرئيسية. الصورة تفضل على جهازك، وتقدري تكملي بالصورة الافتراضية.</p><div class="welcome-photo-row"><img class="welcome-photo-preview" id="welcomePhotoPreview" src="${store.getHeroImage()?.dataUrl || "assets/img/default-bride.png"}" alt="معاينة الصورة"><div class="welcome-photo-copy"><strong>صورة يومك الجميل</strong><small>JPG أو PNG أو WebP، بحد أقصى 8 ميجا.</small><label class="welcome-photo-pick">اختيار صورة<input type="file" id="welcomePhotoInput" accept="image/jpeg,image/png,image/webp"></label></div></div><p class="form-hint" id="welcomePhotoStatus" role="status"></p>`;
+      buttons = `<button class="welcome-secondary" data-welcome="profile">رجوع</button><button class="welcome-primary" data-welcome="photo-next">التالي</button>`;
+    } else if (welcomeState.step === "date") {
+      pct = 78; html = `${welcomeIcon("calendar")}<p class="eyebrow">الخطوة الثالثة من 3</p><h2 id="welcomeTitle">تحبي تحددي موعد الفرح؟</h2><p>لو أضفتِ الموعد، يظهر لكِ عدّ تنازلي في الرئيسية. تقدري تسيبيه فاضي أو تعدليه لاحقًا من الإعدادات.</p><form class="welcome-form" id="welcomeDateForm"><label for="welcomeDateInput">موعد الفرح <span class="optional">(اختياري)</span><input id="welcomeDateInput" type="date" min="${new Date().toISOString().slice(0,10)}"></label></form>`;
+      buttons = `<button class="welcome-secondary" data-welcome="photo">رجوع</button><button class="welcome-secondary" data-welcome="skip-date">تخطي الموعد</button><button class="welcome-primary" data-welcome="save-date">حفظ ومتابعة</button>`;
+    } else if (welcomeState.step === "tour-prompt") {
+      pct = 100; html = `${welcomeIcon("sparkles")}<p class="eyebrow">كده بقيتي جاهزة 💗</p><h2 id="welcomeTitle">رحلتك بدأت يا ${esc((profile.name || "عروسة").trim() || "عروسة")}</h2><p>تحبي نعمل جولة سريعة نتعرف فيها على أهم أقسام Bride List؟ الجولة اختيارية وتقدري تتخطّيها في أي وقت.</p>`;
+      buttons = `<button class="welcome-secondary" data-welcome="finish">اكتشفي الموقع لاحقًا</button><button class="welcome-primary" data-welcome="tour-start">ورّيني مميزات الموقع</button>`;
+    } else if (welcomeState.step === "tour") {
+      const item = WELCOME_TOUR[welcomeState.tourIndex]; pct = 100;
+      html = `${welcomeIcon(item.icon)}<p class="eyebrow">جولة تعريفية · ${welcomeState.tourIndex + 1} من ${WELCOME_TOUR.length}</p><h2 id="welcomeTitle">${item.title}</h2><p>${item.text}</p><div class="welcome-tour-list"><div class="welcome-tour-item"><span><i data-icon="${item.icon}"></i></span><div><strong>${item.title}</strong><small>${item.text}</small></div></div></div>`;
+      buttons = `${welcomeState.tourIndex > 0 ? `<button class="welcome-secondary" data-welcome="tour-back">السابق</button>` : `<button class="welcome-secondary" data-welcome="tour-exit">تخطي الجولة</button>`}<button class="welcome-primary" data-welcome="tour-next">${welcomeState.tourIndex === WELCOME_TOUR.length - 1 ? "إنهاء والبدء" : "التالي"}</button>`;
+    }
+    content.innerHTML = html; actions.innerHTML = buttons; progress.style.width = `${pct}%`; Icons.hydrate();
+    if (welcomeState.step === "profile") $("welcomeNameInput").value = (profile.name || "").trim();
+    if (welcomeState.step === "date") $("welcomeDateInput").value = profile.weddingDate || "";
+  }
+  function welcomeOpen(force = false) {
+    const meta = readWelcomeMeta();
+    if (!force && (meta.completed || (meta.dismissed && !meta.legacyUser))) return;
+    welcomeState.step = "intro"; welcomeState.tourIndex = 0; welcomeState.selectedImage = null;
+    welcomeRender();
+    const dlg = $("welcomeDialog"); if (!dlg.open) dlg.showModal();
+  }
+  function welcomeClose(completed) {
+    writeWelcomeMeta(completed
+      ? { completed: true, dismissed: false, legacyUser: false, completedAt: new Date().toISOString() }
+      : { dismissed: true, legacyUser: false, dismissedAt: new Date().toISOString() });
+    if ($("welcomeDialog").open) $("welcomeDialog").close();
+    render();
+  }
+  function welcomeSaveProfile() {
+    const name = $("welcomeNameInput").value.trim();
+    try { store.updateProfile({ name }); welcomeState.step = "photo"; welcomeRender(); }
+    catch (error) { toast(error.message || "تعذر حفظ الاسم.", 4200); }
+  }
+  async function welcomeSavePhoto(file) {
+    if (!file) return;
+    const status = $("welcomePhotoStatus");
+    if (!IMG_TYPES.includes(file.type)) { status.textContent = "اختاري صورة JPG أو PNG أو WebP. الصورة الحالية لم تتغير."; return; }
+    if (file.size > IMG_MAX_BYTES) { status.textContent = "حجم الصورة أكبر من 8 ميجا. اختاري صورة أصغر؛ الصورة الحالية لم تتغير."; return; }
+    status.textContent = "بنجهز الصورة...";
+    try {
+      const dataUrl = await compressImage(file); store.setHeroImage(dataUrl); welcomeState.selectedImage = dataUrl;
+      $("welcomePhotoPreview").src = dataUrl; status.textContent = "اتحفظت صورتك على جهازك بنجاح 💗"; resolveHero();
+    } catch (error) { status.textContent = (error.message || "تعذر حفظ الصورة.") + " الصورة السابقة لم تتغير."; }
+  }
+  function welcomeHandle(action) {
+    if (action === "intro") welcomeState.step = "intro";
+    else if (action === "profile") welcomeState.step = "profile";
+    else if (action === "save-profile") { welcomeSaveProfile(); return; }
+    else if (action === "photo") welcomeState.step = "photo";
+    else if (action === "photo-next") welcomeState.step = "date";
+    else if (action === "save-date") {
+      const date = $("welcomeDateInput").value;
+      if (date && calc.daysUntil(date) === null) { toast("راجعي تاريخ الفرح."); return; }
+      try { store.updateProfile({ weddingDate: date }); welcomeState.step = "tour-prompt"; }
+      catch (error) { toast(error.message || "تعذر حفظ الموعد.", 4200); return; }
+    } else if (action === "skip-date") {
+      welcomeState.step = "tour-prompt";
+    } else if (action === "tour-start") { welcomeState.step = "tour"; welcomeState.tourIndex = 0; }
+    else if (action === "tour-back") welcomeState.tourIndex = Math.max(0, welcomeState.tourIndex - 1);
+    else if (action === "tour-next") {
+      if (welcomeState.tourIndex >= WELCOME_TOUR.length - 1) { welcomeClose(true); return; }
+      welcomeState.tourIndex++;
+    } else if (action === "tour-exit" || action === "finish") { welcomeClose(true); return; }
+    welcomeRender();
   }
 
   /* ---------- التوجيه (Hash) : الرجوع في المتصفح/الموبايل يشتغل طبيعي ---------- */
@@ -318,8 +419,9 @@
     const s = state();
     $("avatarBtn").textContent = brideName(s).charAt(0) || store.DEFAULT_BRIDE_NAME.charAt(0);
     fillCategorySelects();
-    ({ dashboard: renderDashboard, categories: renderCategories, category: renderCategoryDetail, items: renderItems, budget: renderBudget, tips: renderTips, settings: renderSettings })[currentView]();
+    ({ dashboard: renderDashboard, categories: renderCategories, category: renderCategoryDetail, items: renderItems, budget: renderBudget, tips: renderTips, settings: renderSettings, about: renderAbout })[currentView]();
   }
+  function renderAbout() { Icons.hydrate(); }
 
   /* ---------- نافذة البند ---------- */
   function syncItemForm() {
@@ -599,6 +701,13 @@
 
   /* ---------- الربط ---------- */
   function bind() {
+    $("welcomeActions").addEventListener("click", e => { const button = e.target.closest("[data-welcome]"); if (button) welcomeHandle(button.dataset.welcome); });
+    $("welcomeSkip").addEventListener("click", () => welcomeClose(false));
+    $("welcomeDialog").addEventListener("click", e => { if (e.target === $("welcomeDialog")) welcomeClose(false); });
+    $("welcomeDialog").addEventListener("cancel", e => { e.preventDefault(); welcomeClose(false); });
+    $("welcomeDialog").addEventListener("change", e => { if (e.target.id === "welcomePhotoInput") welcomeSavePhoto(e.target.files?.[0]); });
+    $("replayWelcomeButton").addEventListener("click", () => welcomeOpen(true));
+    $("aboutReplayButton").addEventListener("click", () => welcomeOpen(true));
     window.addEventListener("hashchange", applyRoute);
     $("addFirstItem").addEventListener("click", () => openItemDialog());
     $("addItemButton").addEventListener("click", () => openItemDialog());
@@ -675,4 +784,7 @@
     else if (migration.removedCategories) toast("اتحدّثت الفئات والبنود. فئة «الرفايع» وبياناتك زي ما هي، ونسخة القديم محفوظة في الإعدادات.", 8000);
   }
   if (!store.isPersistent()) toast("تنبيه: المتصفح لا يسمح بحفظ البيانات حاليًا، فلن تبقى بعد إغلاق الصفحة.", 6000);
+  /* تظهر الجولة لكل مستخدمة لم تكملها أو تؤجلها، دون التأثر بوجود بيانات محفوظة مسبقًا. */
+  const welcomeMeta = readWelcomeMeta();
+  if (!welcomeMeta.completed && (!welcomeMeta.dismissed || welcomeMeta.legacyUser)) setTimeout(() => welcomeOpen(false), 250);
 })();
