@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abanoub13-7.github.io/bride-list/sitemap.xml
