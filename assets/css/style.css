@@ -639,3 +639,19 @@ details[open]>summary .tip-chev{transform:rotate(180deg)}
 .about-content-note{margin-top:var(--sp-4);padding:14px 16px;border-radius:14px;background:var(--champagne-soft);border:1px solid #ecdcc0}
 @media(max-width:900px){.about-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.about-card-grid{grid-template-columns:1fr}.about-guide,.about-privacy{padding:var(--sp-4)}.about-hero .about-actions{width:100%;flex-direction:column}.about-hero .about-actions>*{width:100%}.about-steps li{padding-inline-end:54px}}
+
+/* ===== تنسيق الاعلانات  ===== */
+.ad-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 28px auto;
+  padding: 12px 0;
+  text-align: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ad-container .adsbygoogle {
+  width: 100%;
+  min-height: 100px;
+}
