@@ -164,7 +164,8 @@
       const on = el.dataset.nav === navKey; el.classList.toggle("active", on);
       if (on) el.setAttribute("aria-current", "page"); else el.removeAttribute("aria-current");
     });
-    $("pageTitle").textContent = TITLES[view];
+    const pageTitle = $("pageTitle");
+    if (pageTitle) pageTitle.textContent = TITLES[view];
     render();
     window.scrollTo(0, 0);
   }
@@ -283,7 +284,8 @@
     const s = state(), cat = catById(s, currentCatId); if (!cat) return;
     const all = itemsOf(s, cat.id), sum = calc.summarize(all), tone = toneOf(s, cat);
     const f = detailFilters[cat.id] || (detailFilters[cat.id] = { q: "", status: "" });
-    $("pageTitle").textContent = cat.name;
+    const pageTitle = $("pageTitle");
+    if (pageTitle) pageTitle.textContent = cat.name;
     $("detailHead").innerHTML = `
       <a class="back-link" href="#/categories">${ico("back")} رجوع إلى الفئات</a>
       <div class="detail-main tone-${tone}">
@@ -417,7 +419,8 @@
 
   function render() {
     const s = state();
-    $("avatarBtn").textContent = brideName(s).charAt(0) || store.DEFAULT_BRIDE_NAME.charAt(0);
+    const avatar = $("avatarBtn");
+    if (avatar) avatar.textContent = brideName(s).charAt(0) || store.DEFAULT_BRIDE_NAME.charAt(0);
     fillCategorySelects();
     ({ dashboard: renderDashboard, categories: renderCategories, category: renderCategoryDetail, items: renderItems, budget: renderBudget, tips: renderTips, settings: renderSettings, about: renderAbout })[currentView]();
   }
