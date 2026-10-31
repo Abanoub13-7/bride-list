@@ -606,6 +606,23 @@
     const c = ids.filter(id => done[id]).length;
     return { done: c, total: ids.length, pct: ids.length ? Math.round((c / ids.length) * 100) : 0 };
   }
+  /* ما كان المستخدم قد عدّله في فئة «شنطة شهر العسل» القديمة: للقراءة فقط، خارج المشتريات والميزانية */
+  function legacyHoneymoonHtml() {
+    const arch = store.getLegacyHoneymoon();
+    if (!arch || !arch.items.length) return "";
+    const rows = arch.items.map(it => {
+      const bits = [`${n(it.purchased)} من ${n(it.required)} ${esc(it.unit)}`];
+      if (it.unitPrice !== null) bits.push(`السعر ${money(it.unitPrice)}`);
+      if (it.notes) bits.push(esc(it.notes));
+      return `<li><strong>${esc(it.name)}</strong><span class="muted"> — ${bits.join(" • ")}</span></li>`;
+    }).join("");
+    return `<section class="tips-group tone-beige" id="tg-hm-archive">
+      <header class="tg-head"><span class="tg-ic">${ico("box")}</span><div class="tg-title"><h2>ما حفظتيه من شنطة شهر العسل القديمة</h2><p class="muted">للاطلاع فقط — غير محسوب في المشتريات أو الميزانية</p></div></header>
+      <div class="tg-list"><ul class="legacy-list">${rows}</ul>
+      <p class="form-hint">دي بنود كنتِ عدّلتيها قبل تحويل الشنطة إلى نصائح. لو مش محتاجاها، تقدري تحذفيها من هنا.</p>
+      <button type="button" class="text-button" data-clear-hm-archive>حذف هذه القائمة</button></div>
+    </section>`;
+  }
   function tipsGroupHtml(g) {
     return `<section class="tips-group tone-${g.tone}" id="tg-${g.id}">
       <header class="tg-head"><span class="tg-ic">${ico(g.icon)}</span><div class="tg-title"><h2>${esc(g.title)}</h2><p class="muted">${esc(g.sub)}</p></div></header>
@@ -640,12 +657,17 @@
     tipsTab = tab.id;
     $("tipsTabs").innerHTML = Tips.tabs.map(t => `<button type="button" role="tab" class="tips-tab ${t.id === tab.id ? "active" : ""}" id="tab-${t.id}" aria-selected="${t.id === tab.id}" aria-controls="tipsBody" tabindex="${t.id === tab.id ? 0 : -1}" data-tab="${t.id}">${ico(t.icon)}<span>${esc(t.label)}</span></button>`).join("");
     $("tipsBody").setAttribute("aria-labelledby", `tab-${tab.id}`);
-    $("tipsBody").innerHTML = tab.groups.map((g, i) => (g.kind === "checklist" ? checklistGroupHtml(g, done, i === 0) : tipsGroupHtml(g))).join("");
+    $("tipsBody").innerHTML = tab.groups.map((g, i) => (g.kind === "checklist" ? checklistGroupHtml(g, done, i === 0) : tipsGroupHtml(g))).join("") + (tab.id === "honeymoon" ? legacyHoneymoonHtml() : "");
     updateTipsProgress();
   }
   function bindTips() {
     const root = $("view-tips");
     root.addEventListener("click", e => {
+      if (e.target.closest("[data-clear-hm-archive]")) {
+        if (!confirm("حذف قائمة شنطة شهر العسل القديمة نهائيًا؟ ده مش بيأثر على بنود الجهاز.")) return;
+        try { store.clearLegacyHoneymoon(); renderTips(); toast("تم حذف القائمة القديمة."); } catch (error) { toast(error.message || "تعذر الحفظ.", 4200); }
+        return;
+      }
       const tabBtn = e.target.closest("[data-tab]"), reset = e.target.closest("[data-reset-group]");
       if (tabBtn) { tipsTab = tabBtn.dataset.tab; renderTips(); $(`tab-${tipsTab}`)?.focus({ preventScroll: true }); return; }
       if (reset) {
@@ -784,6 +806,12 @@
   const migration = store.consumeMigrationNotice();
   if (migration) {
     if (migration.failed) toast("مساحة تخزين المتصفح ممتلئة، فأجّلنا تحديث الفئات علشان بياناتك تفضل زي ما هي. فضّي مساحة وافتحي الصفحة تاني.", 8000);
+    else if (migration.v7) {
+      const m = migration.v7;
+      toast(m.archivedItems
+        ? "اتحدّثت الكميات حسب ملف التجهيزات، وشنطة شهر العسل بقت نصائح فقط. اللي كنتِ عدّلتيه فيها اتحفظ في قسم النصائح، وبياناتك كلها زي ما هي."
+        : "اتحدّثت الكميات حسب ملف التجهيزات، وشنطة شهر العسل بقت نصائح فقط. بياناتك زي ما هي.", 9000);
+    }
     else if (migration.removedCategories) toast("اتحدّثت الفئات والبنود. فئة «الرفايع» وبياناتك زي ما هي، ونسخة القديم محفوظة في الإعدادات.", 8000);
   }
   if (!store.isPersistent()) toast("تنبيه: المتصفح لا يسمح بحفظ البيانات حاليًا، فلن تبقى بعد إغلاق الصفحة.", 6000);
