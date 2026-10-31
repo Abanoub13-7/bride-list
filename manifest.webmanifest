@@ -1,0 +1,19 @@
+{
+  "name": "Bride List — قائمة جهاز العروسة",
+  "short_name": "Bride List",
+  "description": "نظّمي جهاز العروسة وتجهيز البيت، وتابعي البنود والمشتريات والميزانية.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf4f0",
+  "theme_color": "#faf4f0",
+  "icons": [
+    { "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/img/logo-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

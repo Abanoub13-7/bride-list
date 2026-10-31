@@ -1,0 +1,6 @@
+{
+  "name": "bride-list",
+  "private": true,
+  "description": "Bride List — static site + one serverless function (api/contact.js).",
+  "engines": { "node": ">=18" }
+}

@@ -24,15 +24,37 @@
     rel="canonical"
     href="https://bride-list.vercel.app/">
 
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bride List">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- الخطوط: اتصال مبكر وتحميل غير حاجب للعرض مع خطوط محلية بديلة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="assets/img/default-bride.webp" type="image/webp">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap"></noscript>
+
   <!-- Favicon & Apple Touch Icon -->
   <link
     rel="icon"
     type="image/png"
-    sizes="1024x1024"
-    href="https://bride-list.vercel.app/assets/img/logo.png">
-  <link
-    rel="apple-touch-icon"
-    href="https://bride-list.vercel.app/assets/img/logo.png">
+    sizes="192x192"
+    href="/assets/img/logo-192.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bride List">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="assets/img/default-bride.webp" type="image/webp">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap"></noscript>
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -80,12 +102,9 @@
     name="twitter:image"
     content="https://bride-list.vercel.app/assets/img/logo.png">
 
-  <!-- Google AdSense -->
-  <script
-    async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6021110895238504"
-    crossorigin="anonymous">
-  </script>
+  <!-- الموافقة والإعلانات: لا يُحمَّل AdSense قبل موافقة/إشعار الـ CMP (انظر assets/js/consent.js) -->
+  <script src="assets/js/site-config.js"></script>
+  <script src="assets/js/consent.js"></script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -122,7 +141,7 @@
 <body>
   <div class="app-shell">
     <main class="app-main">
-      <h1 id="pageTitle" class="sr-only" aria-live="polite">الرئيسية</h1>
+      <div id="pageTitle" class="sr-only" role="status" aria-live="polite">الرئيسية</div>
       <!-- الرئيسية -->
       <section class="view" id="view-dashboard">
         <div class="welcome-row">
@@ -162,34 +181,8 @@
           <a class="text-button" href="#/categories">كل الفئات <i data-icon="forward"></i></a>
         </div>
         <div id="dashCategories" class="category-grid"></div>
-
         
-<!-- مساحة إعلان Google AdSense -->
-<div class="ad-container" aria-label="مساحة إعلانية">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-6021110895238504"
-       data-ad-slot="9309931617"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6021110895238504"
-     crossorigin="anonymous"></script>
-<!-- ads new -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-6021110895238504"
-     data-ad-slot="8819900462"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-        
+        <a class="text-button guides-link" href="/guides/">أدلة تجهيز العروسة والبيت: القائمة والميزانية والمطبخ والمفروشات <i data-icon="forward"></i></a>
         <a class="tips-promo" href="#/tips" aria-label="النصائح الذهبية للعروسة">
           <span class="tips-promo-ic"><i data-icon="bulb"></i></span>
           <span class="tips-promo-copy"><strong>✨ النصائح الذهبية للعروسة</strong><small id="tipsPromoText">نصائح عملية وجداول تجهيز وقوائم مراجعة لحد يوم الفرح.</small><span class="progress-track tips-promo-track" aria-hidden="true"><span id="tipsPromoBar"></span></span></span>
@@ -312,6 +305,7 @@
       <!-- الإعدادات -->
       <section class="view" id="view-settings">
         <div class="page-heading"><div><p class="eyebrow">خلي التجربة على ذوقك</p><h1>الإعدادات</h1><p class="muted">بياناتك وتفضيلاتك والنسخ الاحتياطي.</p></div></div>
+        <section class="panel settings-panel" id="installPanel" hidden><div class="panel-heading"><div><h3>تثبيت التطبيق</h3><p class="muted" data-install-text></p></div></div><div class="form-actions"><button class="primary-button" type="button" data-install-btn hidden>تثبيت</button></div></section>
         <section class="panel settings-panel">
           <div class="panel-heading"><div><h3>بيانات العروسة</h3><p class="muted">تظهر البيانات دي في لوحة المتابعة فقط.</p></div><span class="round-icon"><i data-icon="heart"></i></span></div>
           <form id="profileForm" class="settings-form">
@@ -343,7 +337,7 @@
           <div class="danger-zone"><div><strong>إعادة ضبط بيانات المشروع</strong><p>تحذف كل بيانات القائمة المحفوظة في هذا المتصفح.</p></div><button class="danger-button" id="resetButton">مسح كل البيانات</button></div>
         </section>
         <section class="panel welcome-help-panel"><div class="panel-heading"><div><h3>عن الموقع وكيفية الاستخدام</h3><p class="muted">تعرفي على المزايا وطريقة الاستخدام والخصوصية، أو أعيدي الجولة الترحيبية.</p></div><span class="round-icon"><i data-icon="sparkles"></i></span></div><div class="about-actions"><a class="outline-button" href="#/about">دليل Bride List</a><button class="outline-button" type="button" id="replayWelcomeButton">إعادة الجولة الترحيبية</button></div></section>
-        <section class="panel about-panel"><div class="about-logo"><img src="assets/img/logo.png" alt="لوجو Bride List" width="1024" height="1024" decoding="async"></div><div><h3>Bride List</h3><p class="muted">نسختك الشخصية لتنظيم تجهيزاتك خطوة بخطوة.</p><span class="privacy-note"><span class="privacy-dot"></span> لا يوجد تسجيل دخول أو قاعدة بيانات. بياناتك محفوظة محليًا في متصفحك.</span></div></section>
+        <section class="panel about-panel"><div class="about-logo"><img src="assets/img/logo-384.webp" alt="لوجو Bride List" width="384" height="384" decoding="async"></div><div><h3>Bride List</h3><p class="muted">نسختك الشخصية لتنظيم تجهيزاتك خطوة بخطوة.</p><span class="privacy-note"><span class="privacy-dot"></span> لا يوجد تسجيل دخول أو قاعدة بيانات. بياناتك محفوظة محليًا في متصفحك.</span></div></section>
       </section>
 
       <!-- دليل الموقع -->
@@ -358,9 +352,6 @@
             <button class="outline-button" type="button" id="aboutReplayButton">شاهدي الجولة الترحيبية</button>
           </div>
         </section>
-        <!-- اعلان -->
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6021110895238504"
-     crossorigin="anonymous"></script>
         
         <section class="about-section">
           <div class="section-heading"><div><h2>إيه اللي هتلاقيه هنا؟</h2><p class="muted">أدوات عملية تساعدك من غير ما تفرض عليكِ طريقة واحدة للتجهيز.</p></div></div>
@@ -398,7 +389,17 @@
         </section>
       </section>
 
-      <footer class="app-footer">اتعملي على مهلك، المهم تكوني مبسوطة في رحلتك</footer>
+      <footer class="app-footer">
+        <nav class="footer-links" aria-label="روابط الموقع">
+          <a href="/guides/">الأدلة</a>
+          <a href="/about/">عن الموقع</a>
+          <a href="/contact/">تواصل</a>
+          <a href="/privacy/">سياسة الخصوصية</a>
+          <button type="button" class="footer-link-btn" data-consent-settings>إعدادات الخصوصية</button>
+          <a href="/terms/">شروط الاستخدام</a>
+        </nav>
+        <p>اتعملي على مهلك، المهم تكوني مبسوطة في رحلتك</p>
+      </footer>
     </main>
   </div>
 
@@ -417,7 +418,7 @@
   <!-- رحلة الترحيب: إعداد مستقل لا يغيّر بيانات القائمة الحالية -->
   <dialog class="welcome-dialog" id="welcomeDialog" aria-labelledby="welcomeTitle">
     <div class="welcome-shell">
-      <div class="welcome-top"><img src="assets/img/logo.png" alt="Bride List" width="72" height="72"><button type="button" class="welcome-skip" id="welcomeSkip">اكتشفي الموقع لاحقًا</button></div>
+      <div class="welcome-top"><img src="assets/img/logo-120.webp" alt="Bride List" width="72" height="72"><button type="button" class="welcome-skip" id="welcomeSkip">اكتشفي الموقع لاحقًا</button></div>
       <div class="welcome-progress" aria-label="تقدم الإعداد"><span id="welcomeProgress"></span></div>
       <div id="welcomeContent" aria-live="polite"></div>
       <div class="welcome-actions" id="welcomeActions"></div>
@@ -465,11 +466,13 @@
     </form>
   </dialog>
 
-  <script src="assets/js/icons.js"></script>
-  <script src="assets/js/catalog.js"></script>
-  <script src="assets/js/tips.js"></script>
-  <script src="assets/js/storage.js"></script>
-  <script src="assets/js/calc.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/icons.js" defer></script>
+  <script src="assets/js/catalog.js" defer></script>
+  <script src="assets/js/tips.js" defer></script>
+  <script src="assets/js/storage.js" defer></script>
+  <script src="assets/js/calc.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/pwa.js" defer></script>
+  <script src="assets/js/pwa.js" defer></script>
 </body>
 </html>
