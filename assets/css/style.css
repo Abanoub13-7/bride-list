@@ -1,6 +1,5 @@
 /* ====== Bride List — نظام التصميم ======
    كل الألوان والمسافات والظلال وأحجام النص معرّفة كمتغيرات هنا. */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap');
 
 :root{
   /* الهوية: وردي باودر / وردي ترابي / أوف وايت / كريمي / شامبين */
@@ -104,7 +103,7 @@ h1,h2,h3,p{margin:0}
 /* ---- قسم «يومك بيقرب» ----
    الصورة تظهر بوضوح في نصف القسم، والنص على الجانب الآخر فوق تدرج كريمي ناعم. */
 .hero{position:relative;isolation:isolate;overflow:hidden;border-radius:var(--r-lg);background:var(--cream);border:1px solid var(--line);box-shadow:var(--shadow-sm);min-height:320px;display:flex;align-items:center;padding:36px 40px;margin-bottom:var(--sp-6)}
-.hero-photo{position:absolute;inset:0 auto 0 0;width:64%;z-index:-2;background:var(--hero-img,url("../img/default-bride.png")) 50% 30%/cover no-repeat;filter:saturate(1.04) contrast(1.05) brightness(1.01);-webkit-mask-image:linear-gradient(to right,#000 58%,rgba(0,0,0,.55) 82%,transparent 100%);mask-image:linear-gradient(to right,#000 58%,rgba(0,0,0,.55) 82%,transparent 100%)}
+.hero-photo{position:absolute;inset:0 auto 0 0;width:64%;z-index:-2;background:var(--hero-img,url("../img/default-bride.webp")) 50% 30%/cover no-repeat;filter:saturate(1.04) contrast(1.05) brightness(1.01);-webkit-mask-image:linear-gradient(to right,#000 58%,rgba(0,0,0,.55) 82%,transparent 100%);mask-image:linear-gradient(to right,#000 58%,rgba(0,0,0,.55) 82%,transparent 100%)}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to left,rgba(255,250,246,.96) 0%,rgba(255,250,246,.9) 34%,rgba(255,250,246,.35) 58%,rgba(255,250,246,0) 74%)}
 .hero-body{max-width:500px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:700;color:var(--champagne-deep);background:rgba(255,253,251,.9);border:1px solid #ecdcc0;padding:3px 11px;border-radius:var(--r-pill)}
@@ -452,7 +451,7 @@ dialog{color:var(--ink)}
 .cat-budget-panel .progress-track{margin-top:var(--sp-2)}
 .image-panel{margin-bottom:var(--sp-4)}
 .image-row{display:grid;grid-template-columns:200px 1fr;gap:var(--sp-5);align-items:center;margin-top:var(--sp-3)}
-.image-preview{aspect-ratio:1/1;width:100%;border-radius:var(--r-md);border:1px solid var(--line);background:var(--hero-img,url("../img/default-bride.png")) 50% 50%/cover no-repeat,var(--cream)}
+.image-preview{aspect-ratio:1/1;width:100%;border-radius:var(--r-md);border:1px solid var(--line);background:var(--hero-img,url("../img/default-bride.webp")) 50% 50%/cover no-repeat,var(--cream)}
 .image-status{font-weight:700;color:var(--ink-soft);font-size:var(--fs-sm)}
 .image-actions{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin:var(--sp-3) 0}
 .file-button{cursor:pointer}
@@ -659,3 +658,21 @@ details[open]>summary .tip-chev{transform:rotate(180deg)}
 
 /* Accessible text that should not change the visual layout. */
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+/* روابط الفوتر والأدلة */
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin-bottom:6px}
+.footer-links a{display:inline-flex;align-items:center;min-height:var(--tap);padding:0 6px;color:var(--rose-deep);font-size:var(--fs-sm)}
+.guides-link{display:flex;margin:var(--sp-4) 0;min-height:var(--tap)}
+
+/* زر إعدادات الخصوصية في الفوتر + شريط التحديث + بطاقة التثبيت */
+.footer-link-btn{display:inline-flex;align-items:center;min-height:var(--tap);padding:0 6px;border:0;background:none;color:var(--rose-deep);font:inherit;font-size:var(--fs-sm);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.update-bar{position:fixed;inset-inline:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;padding:10px 14px;border-radius:var(--r-md);box-shadow:var(--shadow-md)}
+.update-bar button{min-height:40px;padding:0 14px;border-radius:var(--r-pill);border:0;background:#fff;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.install-panel{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.install-panel[hidden]{display:none}
+.legacy-list{margin:0;padding-inline-start:18px;line-height:2}
+
+/* روابط تشبه الأزرار في الفوتر + شريط التحديث */
+.linklike{background:none;border:0;font:inherit;font-size:var(--fs-sm);color:var(--rose-deep);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:var(--tap);padding:0 6px}
+.update-bar{position:fixed;inset-inline:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:12px;align-items:center;justify-content:space-between;background:#3d3030;color:#fff;padding:10px 14px;border-radius:14px;font-size:14px}
+.update-bar button{background:#fff;color:#3d3030;border:0;border-radius:999px;padding:8px 14px;min-height:40px;font:inherit;cursor:pointer}
