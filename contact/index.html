@@ -1,1 +1,130 @@
-
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تواصل معنا | Bride List</title>
+<meta name="description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://bride-list.vercel.app/contact/">
+<meta name="theme-color" content="#faf4f0">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo-192.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&display=swap"></noscript>
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:site_name" content="Bride List">
+<meta property="og:url" content="https://bride-list.vercel.app/contact/">
+<meta property="og:title" content="تواصل معنا | Bride List">
+<meta property="og:description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<meta property="og:image" content="https://bride-list.vercel.app/assets/img/logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="تواصل معنا | Bride List">
+<meta name="twitter:description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<link rel="stylesheet" href="/assets/css/pages.css">
+<script src="/assets/js/site-config.js"></script>
+<script src="/assets/js/consent.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://bride-list.vercel.app/contact/#page",
+   "url": "https://bride-list.vercel.app/contact/",
+   "name": "تواصل معنا",
+   "headline": "تواصل معنا",
+   "description": "أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.",
+   "inLanguage": "ar-EG",
+   "isPartOf": {
+    "@id": "https://bride-list.vercel.app/#website"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "الرئيسية",
+     "item": "https://bride-list.vercel.app/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "تواصل معنا",
+     "item": "https://bride-list.vercel.app/contact/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">تخطَّي إلى المحتوى</a>
+<header class="site-header">
+  <a class="brand" href="/"><img src="/assets/img/logo-120.webp" alt="" width="40" height="40"><span>Bride List</span></a>
+  <nav aria-label="القائمة الرئيسية">
+    <a href="/">الأداة</a>
+    <a href="/guides/">الأدلة</a>
+    <a href="/about/">عن الموقع</a>
+    <a href="/contact/">تواصل</a>
+  </nav>
+</header>
+<main id="main">
+<article class="doc"><nav class="crumbs" aria-label="مسار التنقل"><a href="/">الرئيسية</a> ‹ <span aria-current="page">تواصل معنا</span></nav><h1>تواصل معنا</h1>
+<p class="lead">يسعدنا أن نسمع ملاحظاتك، سواء أخطاء في المحتوى أو مشكلة في الأداة أو اقتراحًا لتحسين الموقع.</p>
+<div id="contact-box" class="callout note" hidden><p><strong>بريد التواصل:</strong> <span id="contact-slot"></span></p></div>
+<form id="contact-form" class="contact-form" novalidate>
+  <div class="field"><label for="c-name">الاسم</label><input id="c-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="name-err"><p class="field-err" id="name-err" role="alert"></p></div>
+  <div class="field"><label for="c-email">البريد الإلكتروني</label><input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr" maxlength="120" required aria-describedby="email-err"><p class="field-err" id="email-err" role="alert"></p></div>
+  <div class="field"><label for="c-subject">موضوع الرسالة</label><input id="c-subject" name="subject" type="text" maxlength="120" required aria-describedby="subject-err"><p class="field-err" id="subject-err" role="alert"></p></div>
+  <div class="field"><label for="c-message">نص الرسالة</label><textarea id="c-message" name="message" rows="6" maxlength="2000" required aria-describedby="message-err"></textarea><p class="field-err" id="message-err" role="alert"></p></div>
+  <div class="hp" aria-hidden="true"><label>لا تملئي هذا الحقل<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div id="turnstile-holder"></div>
+  <button id="contact-submit" class="btn" type="submit">إرسال الرسالة</button>
+  <p id="contact-status" class="form-status" role="status" aria-live="polite" hidden></p>
+</form>
+<h2>ماذا تكتبين عند التواصل؟</h2>
+<ul><li>الصفحة أو القسم المقصود.</li><li>وصف المشكلة أو الاقتراح.</li><li>نوع الجهاز والمتصفح إن كانت المشكلة تقنية.</li></ul>
+<p class="disc">لا تُرسلي كلمات مرور أو أرقام بطاقات أو بيانات حساسة. تُستخدم بياناتك في النموذج للرد عليك فقط، انظري <a href="/privacy/">سياسة الخصوصية</a>.</p>
+<script>
+(function(){var c=window.BRIDE_SITE_CONFIG||{};var e=(c.contactEmail||"").trim();
+if(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){var s=document.getElementById("contact-slot");var a=document.createElement("a");a.href="mailto:"+e;a.textContent=e;s.appendChild(a);document.getElementById("contact-box").hidden=false;}})();
+</script>
+<script src="/assets/js/contact.js" defer></script>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="foot-cols">
+    <div><h2>الأداة</h2><ul>
+      <li><a href="/">الرئيسية</a></li>
+      <li><a href="/#/categories">الفئات</a></li>
+      <li><a href="/#/budget">الميزانية</a></li>
+      <li><a href="/#/tips">النصائح الذهبية</a></li></ul></div>
+    <div><h2>الأدلة</h2><ul>
+      <li><a href="/guides/bridal-checklist/">كيف تعدّين قائمة جهاز العروسة خطوة بخطوة</a></li>
+      <li><a href="/guides/budget-planning/">تخطيط ميزانية تجهيز البيت في مصر</a></li>
+      <li><a href="/guides/kitchen-essentials/">أساسيات المطبخ: ماذا تشترين وماذا تؤجلين</a></li>
+      <li><a href="/guides/home-essentials/">المفروشات والفوط وتنظيم مستلزمات البيت</a></li>
+      <li><a href="/guides/wedding-timeline/">جدول تجهيزات الفرح: من التخطيط حتى الأيام الأخيرة</a></li>
+      <li><a href="/guides/using-bride-list/">دليل استخدام Bride List</a></li>
+      <li><a href="/guides/">كل الأدلة</a></li></ul></div>
+    <div><h2>عن الموقع</h2><ul>
+      <li><a href="/about/">من نحن</a></li>
+      <li><a href="/contact/">تواصل معنا</a></li>
+      <li><a href="/privacy/">سياسة الخصوصية</a></li>
+      <li><a href="/terms/">شروط الاستخدام</a></li>
+      <li><button type="button" class="linkbtn" data-consent-settings>إعدادات الخصوصية وملفات تعريف الارتباط</button></li></ul></div>
+  </div>
+  <p class="foot-note">المحتوى والأمثلة المالية للتوعية والتنظيم فقط، وليست نصيحة مالية أو قانونية. تحقّقي من الأسعار بنفسك قبل أي شراء.</p>
+</footer>
+<script src="/assets/js/guide-tools.js" defer></script>
+<script src="/assets/js/pwa.js" defer></script>
+</body>
+</html>
