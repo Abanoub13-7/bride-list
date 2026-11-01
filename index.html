@@ -38,6 +38,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap"></noscript>
 
+  <!-- التقاط مبكر لحدث التثبيت قبل تحميل pwa.js (النظام المركزي في assets/js/pwa.js يقرؤه) -->
+  <script>window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__bip=e;});</script>
+
   <!-- Favicon & Apple Touch Icon -->
   <link
     rel="icon"
@@ -45,16 +48,6 @@
     sizes="192x192"
     href="/assets/img/logo-192.png">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Bride List">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="image" href="assets/img/default-bride.webp" type="image/webp">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..800&family=Amiri:wght@700&display=swap"></noscript>
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -150,8 +143,21 @@
             <h1>أهلًا بيكي يا <span class="bride-name" id="welcomeName">عروسة</span></h1>
             <p class="muted">رتّبي أولوياتك وتابعي تجهيزاتك براحة ومن غير توتر.</p>
           </div>
-          <button class="primary-button" id="addFirstItem"><i data-icon="plus"></i> إضافة بند جديد</button>
+          <div class="welcome-actions">
+            <button class="primary-button" id="addFirstItem" type="button"><i data-icon="plus"></i> إضافة بند جديد</button>
+          </div>
         </div>
+
+        <!-- بطاقة التثبيت: نفس نظام التثبيت المركزي (assets/js/pwa.js) المستخدم في الإعدادات -->
+        <section class="install-card" data-install-host="banner" data-state="manual" hidden aria-label="تثبيت التطبيق">
+          <span class="install-card-ic" aria-hidden="true"><i data-icon="download"></i></span>
+          <div class="install-card-copy" role="status" aria-live="polite">
+            <strong data-install-title>أضيفي Bride List إلى شاشتك الرئيسية</strong>
+            <p data-install-text>تقدرين تضيفينه إلى شاشتك الرئيسية من قائمة المتصفح.</p>
+          </div>
+          <button class="primary-button install-card-btn" type="button" data-install-btn><span data-install-btn-label>تثبيت التطبيق</span></button>
+          <button class="icon-button install-card-dismiss" type="button" data-install-dismiss aria-label="إخفاء بطاقة التثبيت"><i data-icon="x"></i></button>
+        </section>
 
         <section class="hero" id="hero" aria-labelledby="heroTitle">
           <div class="hero-photo" aria-hidden="true"></div>
@@ -164,55 +170,62 @@
             <a class="light-button" href="#/settings" id="heroButton"><i data-icon="calendar"></i> <span id="heroButtonText">تحديد موعد الفرح</span></a>
           </div>
         </section>
-        
-        <div class="section-heading">
-          <div><h2>ملخص التجهيزات</h2><p class="muted">نظرة سريعة على اللي اتعمل واللي لسه</p></div>
-          <a class="text-button" href="#/items">عرض كل البنود <i data-icon="forward"></i></a>
-        </div>
-        <div class="stats-grid">
-          <article class="stat-card"><div class="stat-top"><span class="stat-icon tone-mauve"><i data-icon="list"></i></span><span class="stat-caption">إجمالي البنود</span></div><strong class="stat-number" id="totalItems">0</strong><small>بند في قائمتك</small></article>
-          <article class="stat-card"><div class="stat-top"><span class="stat-icon st-complete-ic"><i data-icon="check"></i></span><span class="stat-caption">تم تجهيزه</span></div><strong class="stat-number" id="completedItems">0</strong><small>بند مكتمل</small></article>
-          <article class="stat-card"><div class="stat-top"><span class="stat-icon st-missing-ic"><i data-icon="clock"></i></span><span class="stat-caption">لسه متبقي</span></div><strong class="stat-number" id="remainingItems">0</strong><small>بند محتاج متابعة</small></article>
-          <article class="stat-card"><div class="stat-top"><span class="stat-icon tone-beige"><i data-icon="sparkles"></i></span><span class="stat-caption">نسبة الإنجاز</span></div><strong class="stat-number" id="progressPercent">0%</strong><small>من الكميات المطلوبة</small></article>
-        </div>
+
+        <nav class="quick-links" aria-label="اختصارات سريعة">
+          <a class="quick-link" href="#/items"><span class="quick-ic"><i data-icon="receipt"></i></span><span>تسجيل شراء</span></a>
+          <a class="quick-link" href="#/categories"><span class="quick-ic"><i data-icon="grid"></i></span><span>الفئات</span></a>
+          <a class="quick-link" href="#/budget"><span class="quick-ic"><i data-icon="wallet"></i></span><span>الميزانية</span></a>
+          <a class="quick-link" href="#/tips"><span class="quick-ic"><i data-icon="bulb"></i></span><span>النصائح</span></a>
+        </nav>
+
+        <section class="panel progress-hero" aria-labelledby="progTitle">
+          <div class="progress-hero-top">
+            <div><h2 id="progTitle">تقدّم التجهيز</h2><p class="muted">من إجمالي الكميات المطلوبة</p></div>
+            <strong class="progress-hero-pct" id="progressBig">0%</strong>
+          </div>
+          <div class="progress-track big" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="نسبة الإنجاز الكلية"><span id="progressBar"></span></div>
+          <dl class="mini-stats">
+            <div class="mini-stat"><dt>بنود مطلوبة</dt><dd id="totalItems">0</dd></div>
+            <div class="mini-stat is-done"><dt>تم تجهيزه</dt><dd id="completedItems">0</dd></div>
+            <div class="mini-stat is-todo"><dt>لسه متبقي</dt><dd id="remainingItems">0</dd></div>
+          </dl>
+          <p class="encouragement"><i data-icon="heart"></i><span id="encouragementText">ابدئي بإضافة أول بند في قائمتك، والباقي هيبقى أسهل.</span></p>
+        </section>
+
+        <section class="panel budget-panel" aria-labelledby="bpTitle">
+          <div class="panel-heading"><div><h3 id="bpTitle">نظرة على الميزانية</h3><p class="muted">تقديرات حسب الأسعار الحالية</p></div><a class="tiny-link" href="#/budget">التفاصيل</a></div>
+          <div class="budget-figures">
+            <div class="figure"><span>الميزانية الإجمالية</span><strong id="budgetLimit">لم تُحدد بعد</strong></div>
+            <div class="figure"><span>تم صرفه فعلًا</span><strong id="purchasedCost">غير مكتملة</strong></div>
+            <div class="figure"><span id="dashLeftLabel">المتاح بعد القائمة المسعّرة</span><strong id="dashLeft">—</strong></div>
+          </div>
+          <div class="budget-line budget-required"><span>تكلفة القائمة المسعّرة</span><strong id="requiredCost">غير مكتملة</strong></div>
+          <details class="budget-more">
+            <summary>تفاصيل التكلفة</summary>
+            <div class="budget-line"><span>مجموع ميزانيات الفئات</span><strong id="dashAllocated">لم تُحدد بعد</strong></div>
+            <div class="budget-line"><span id="dashDiffLabel">المبلغ غير الموزع</span><strong id="dashDiff">—</strong></div>
+            <div class="budget-line"><span>تكلفة الكميات المتبقية</span><strong id="remainingCost">غير مكتملة</strong></div>
+          </details>
+          <p class="bd-partial hidden" id="dashUnpriced" role="note"></p>
+        </section>
+
+        <section class="panel recent-panel">
+          <div class="panel-heading"><div><h3>بنود تحتاج استكمال</h3><p class="muted">ابدئي بالخطوة الجاية</p></div><a class="tiny-link" href="#/items">كل البنود</a></div>
+          <div id="attentionList" class="attention-list"></div>
+        </section>
 
         <div class="section-heading">
           <div><h2>فئات التجهيز</h2><p class="muted">اضغطي على أي فئة لتفاصيلها</p></div>
           <a class="text-button" href="#/categories">كل الفئات <i data-icon="forward"></i></a>
         </div>
-        <div id="dashCategories" class="category-grid"></div>
-        
-        <a class="text-button guides-link" href="/guides/">أدلة تجهيز العروسة والبيت: القائمة والميزانية والمطبخ والمفروشات <i data-icon="forward"></i></a>
+        <div id="dashCategories" class="cat-list"></div>
+
         <a class="tips-promo" href="#/tips" aria-label="النصائح الذهبية للعروسة">
           <span class="tips-promo-ic"><i data-icon="bulb"></i></span>
           <span class="tips-promo-copy"><strong>✨ النصائح الذهبية للعروسة</strong><small id="tipsPromoText">نصائح عملية وجداول تجهيز وقوائم مراجعة لحد يوم الفرح.</small><span class="progress-track tips-promo-track" aria-hidden="true"><span id="tipsPromoBar"></span></span></span>
           <span class="tips-promo-go"><i data-icon="forward"></i></span>
         </a>
-
-        <div class="content-grid">
-          <section class="panel progress-panel">
-            <div class="panel-heading"><div><h3>رحلة التجهيز</h3><p class="muted">كل خطوة بتفرق</p></div><span class="round-icon"><i data-icon="sparkles"></i></span></div>
-            <div class="progress-summary"><strong id="progressBig">0%</strong><span>من إجمالي الكميات</span></div>
-            <div class="progress-track"><span id="progressBar"></span></div>
-            <div class="progress-legend"><span><i class="legend-dot done"></i> تم شراؤه</span><span><i class="legend-dot todo"></i> باقي التجهيزات</span></div>
-            <div class="encouragement"><i data-icon="heart"></i><p id="encouragementText">ابدئي بإضافة أول بند في قائمتك، والباقي هيبقى أسهل.</p></div>
-          </section>
-          <section class="panel budget-panel">
-            <div class="panel-heading"><div><h3>نظرة على الميزانية</h3><p class="muted">تقديرات حسب الأسعار الحالية</p></div><a class="tiny-link" href="#/budget">التفاصيل</a></div>
-            <div class="budget-total"><span>الميزانية المحددة</span><strong id="budgetLimit">لم تُحدد بعد</strong></div>
-            <div class="budget-line"><span>مجموع ميزانيات الفئات</span><strong id="dashAllocated">لم تُحدد بعد</strong></div>
-            <div class="budget-line"><span id="dashDiffLabel">المبلغ غير الموزع</span><strong id="dashDiff">—</strong></div>
-            <div class="budget-line"><span>تكلفة القائمة المطلوبة</span><strong id="requiredCost">غير مكتملة</strong></div>
-            <div class="budget-line"><span>التكلفة التقديرية للمشتريات</span><strong id="purchasedCost">غير مكتملة</strong></div>
-            <div class="budget-line"><span>التكلفة التقديرية للمتبقي</span><strong id="remainingCost">غير مكتملة</strong></div>
-            <a class="outline-button full-width" href="#/budget">إدارة الميزانية</a>
-          </section>
-        </div>
-
-        <section class="panel recent-panel">
-          <div class="panel-heading"><div><h3>بنود محتاجة اهتمام</h3><p class="muted">ابدئي بالخطوة الجاية</p></div><a class="tiny-link" href="#/items">كل البنود</a></div>
-          <div id="attentionList" class="attention-list"></div>
-        </section>
+        <a class="text-button guides-link" href="/guides/">أدلة تجهيز العروسة والبيت: القائمة والميزانية والمطبخ والمفروشات <i data-icon="forward"></i></a>
       </section>
 
       <!-- الفئات -->
@@ -267,23 +280,25 @@
           <div class="budget-input-row"><label for="budgetInput">المبلغ بالجنيه المصري</label><div class="money-input"><input type="number" id="budgetInput" min="0" step="0.01" placeholder="مثال: 50000"><span>ج.م</span></div><button class="primary-button" id="saveBudgetButton">حفظ الميزانية</button></div>
         </div>
         <div id="budgetAlert" class="budget-status plan-alert" role="status" aria-live="polite"></div>
-        <div class="stats-grid plan-stats">
-          <article class="stat-card"><span class="stat-caption">الميزانية الإجمالية</span><strong class="stat-number smaller" id="planTotal">لم تُحدد بعد</strong><small>الحد اللي وضعتيه للتجهيز</small></article>
-          <article class="stat-card"><span class="stat-caption">مجموع ميزانيات الفئات</span><strong class="stat-number smaller" id="planAllocated">لم تُحدد بعد</strong><small id="planCounts">—</small></article>
+        <div class="stats-grid plan-stats bd-top">
+          <article class="stat-card"><span class="stat-caption">الميزانية الإجمالية</span><strong class="stat-number smaller" id="planTotal">لم تُحدد بعد</strong><small>المبلغ اللي حددتيه لتجهيز البيت</small></article>
+          <article class="stat-card"><span class="stat-caption">ميزانيات الفئات الموزعة</span><strong class="stat-number smaller" id="planAllocated">لم تُحدد بعد</strong><small id="planCounts">—</small></article>
           <article class="stat-card" id="planDiffCard"><span class="stat-caption" id="planDiffLabel">المبلغ غير الموزع</span><strong class="stat-number smaller" id="planDiff">—</strong><small id="planDiffNote">—</small></article>
+          <article class="stat-card" id="listCostCard"><span class="stat-caption">تكلفة القائمة المسعّرة</span><strong class="stat-number smaller" id="budgetRequired">غير مكتملة</strong><small id="budgetRequiredNote">البنود المسعّرة فقط</small></article>
         </div>
+        <section class="panel bd-gauge-panel" id="bdGaugePanel">
+          <div class="panel-heading"><div><h3>استهلاك الميزانية</h3><p class="muted">تكلفة القائمة المسعّرة مقابل الميزانية الإجمالية</p></div><strong class="plan-percent" id="bdGaugePercent">—</strong></div>
+          <div class="bd-gauge" id="bdGauge" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="استهلاك الميزانية الإجمالية"><span class="bd-seg bought" id="bdSegBought"></span><span class="bd-seg planned" id="bdSegPlanned"></span></div>
+          <div class="bd-legend"><span><i class="bd-dot bought"></i> تم شراؤه <b id="budgetPurchased">—</b></span><span><i class="bd-dot planned"></i> متبقٍ مسعّر <b id="budgetRemaining">—</b></span><span><i class="bd-dot free"></i> <span id="bdLeftLabel">المتاح من الميزانية</span> <b id="bdLeft">—</b></span></div>
+          <div id="budgetStatus" class="budget-status"></div>
+          <p class="bd-footnote">«تم شراؤه» هو المصروف الفعلي المسجل في سجل المشتريات، والباقي تقدير بسعر الوحدة التقديري. عملية أو بند بلا سعر لا يدخل في الحساب (ولا يُعتبر صفرًا).</p>
+        </section>
         <section class="panel plan-panel">
           <div class="panel-heading"><div><h3>توزيع الميزانية على الفئات</h3><p class="muted">الميزانية المخصصة للفئات ليست مبلغًا مدفوعًا</p></div><strong class="plan-percent" id="planPercent">—</strong></div>
           <div class="progress-track big plan-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="نسبة توزيع الميزانية" id="planTrack"><span id="planBar"></span></div>
           <p class="muted" id="planNote"></p>
         </section>
-        <div class="stats-grid budget-stats">
-          <article class="stat-card"><span class="stat-caption">تكلفة القائمة المطلوبة</span><strong class="stat-number smaller" id="budgetRequired">غير مكتملة</strong><small>تقدير لكل الكميات المطلوبة</small></article>
-          <article class="stat-card"><span class="stat-caption">تكلفة المشتريات التقديرية</span><strong class="stat-number smaller" id="budgetPurchased">غير مكتملة</strong><small>ليست سجلًا تاريخيًا للمدفوعات</small></article>
-          <article class="stat-card"><span class="stat-caption">تكلفة المتبقي التقديرية</span><strong class="stat-number smaller" id="budgetRemaining">غير مكتملة</strong><small>حسب الأسعار الحالية</small></article>
-        </div>
-        <section class="panel budget-status-panel"><div class="panel-heading"><div><h3>موقف الميزانية من تكلفة القائمة</h3><p class="muted">مقارنة بين الميزانية الإجمالية وتكلفة التجهيزات المطلوبة</p></div><span class="round-icon"><i data-icon="wallet"></i></span></div><div id="budgetStatus" class="budget-status"></div></section>
-        <section class="panel"><div class="panel-heading"><div><h3>ميزانية وتكلفة كل فئة</h3><p class="muted">اضغطي «تعديل الميزانية» علشان تحددي مبلغ لأي فئة</p></div></div><div id="categoryCostList" class="category-cost-list"></div></section>
+        <section class="panel"><div class="panel-heading"><div><h3>ميزانية وتكلفة كل فئة</h3><p class="muted">اضغطي «تعديل الميزانية» علشان تحددي مبلغ لأي فئة</p></div></div><div id="categoryCostList" class="category-cost-list bd-cats"></div></section>
       </section>
 
       <!-- النصائح الذهبية -->
@@ -305,8 +320,18 @@
       <!-- الإعدادات -->
       <section class="view" id="view-settings">
         <div class="page-heading"><div><p class="eyebrow">خلي التجربة على ذوقك</p><h1>الإعدادات</h1><p class="muted">بياناتك وتفضيلاتك والنسخ الاحتياطي.</p></div></div>
-        <section class="panel settings-panel" id="installPanel" hidden><div class="panel-heading"><div><h3>تثبيت التطبيق</h3><p class="muted" data-install-text></p></div></div><div class="form-actions"><button class="primary-button" type="button" data-install-btn hidden>تثبيت</button></div></section>
-        <section class="panel settings-panel">
+        <nav class="settings-jump" aria-label="أقسام الإعدادات">
+          <a href="#/settings" data-jump="set-app">التطبيق</a>
+          <a href="#/settings" data-jump="set-install">التثبيت</a>
+          <a href="#/settings" data-jump="set-backup">النسخ الاحتياطي</a>
+          <a href="#/settings" data-jump="set-data">البيانات</a>
+          <a href="#/settings" data-jump="set-privacy">الخصوصية</a>
+          <a href="#/settings" data-jump="set-info">عن التطبيق</a>
+        </nav>
+
+        <section class="settings-group" id="set-app" aria-labelledby="g-app">
+          <h2 class="group-title" id="g-app">إعدادات التطبيق</h2>
+          <section class="panel settings-panel">
           <div class="panel-heading"><div><h3>بيانات العروسة</h3><p class="muted">تظهر البيانات دي في لوحة المتابعة فقط.</p></div><span class="round-icon"><i data-icon="heart"></i></span></div>
           <form id="profileForm" class="settings-form">
             <label>الاسم اللي تحبي يظهر <span class="optional">(سيبيه فاضي لاسم «عروسة»)</span><input id="nameInput" type="text" maxlength="60" placeholder="عروسة"></label>
@@ -314,7 +339,7 @@
             <div class="form-actions"><button class="primary-button" type="submit">حفظ التغييرات</button></div>
           </form>
         </section>
-        <section class="panel image-panel" id="imagePanel">
+          <section class="panel image-panel" id="imagePanel">
           <div class="panel-heading"><div><h3>صورة يومك الجميل</h3><p class="muted">الصورة اللي بتظهر خلف «يومك بيقرب» في الرئيسية.</p></div><span class="round-icon"><i data-icon="sparkles"></i></span></div>
           <div class="image-row">
             <div class="image-preview" id="imagePreview" role="img" aria-label="معاينة صورة الصفحة الرئيسية"></div>
@@ -329,15 +354,62 @@
             </div>
           </div>
         </section>
-        <section class="panel backup-panel">
-          <div class="panel-heading"><div><h3>النسخ الاحتياطي</h3><p class="muted">احتفظي بنسخة من بياناتك أو استعيدي نسخة سابقة.</p></div><span class="round-icon"><i data-icon="download"></i></span></div>
+        </section>
+
+        <section class="settings-group" id="set-install" aria-labelledby="g-install">
+          <h2 class="group-title" id="g-install">تثبيت التطبيق على الهاتف</h2>
+          <section class="panel install-card install-card-settings" data-install-host="settings" data-state="manual">
+            <span class="install-card-ic" aria-hidden="true"><i data-icon="download"></i></span>
+            <div class="install-card-copy" role="status" aria-live="polite">
+              <strong data-install-title>أضيفي Bride List إلى شاشتك الرئيسية</strong>
+              <p data-install-text>تقدرين تضيفينه إلى شاشتك الرئيسية من قائمة المتصفح.</p>
+            </div>
+            <button class="primary-button install-card-btn" type="button" data-install-btn><i data-icon="download"></i> <span data-install-btn-label>تثبيت التطبيق على الهاتف</span></button>
+            <ul class="install-benefits">
+              <li>يفتح بشاشة كاملة وبأيقونة على الشاشة الرئيسية.</li>
+              <li>بياناتك تفضل محفوظة على جهازك زي ما هي.</li>
+              <li>يعمل دون اتصال بآخر نسخة زرتيها، وبدون متجر تطبيقات.</li>
+            </ul>
+          </section>
+        </section>
+
+        <section class="settings-group" id="set-backup" aria-labelledby="g-backup">
+          <h2 class="group-title" id="g-backup">النسخ الاحتياطي واستعادة البيانات</h2>
+          <section class="panel backup-panel">
+          <div class="panel-heading"><div><h3>نسخة من بياناتك</h3><p class="muted">احتفظي بنسخة من بياناتك أو استعيدي نسخة سابقة.</p></div><span class="round-icon"><i data-icon="download"></i></span></div>
           <div class="backup-row"><div class="backup-icon"><i data-icon="download"></i></div><div class="backup-copy"><strong>تصدير نسخة احتياطية</strong><p>تحميل كل الفئات والبنود والإعدادات في ملف JSON.</p></div><button class="outline-button" id="exportButton">تصدير البيانات</button></div>
           <div class="backup-row"><div class="backup-icon"><i data-icon="upload"></i></div><div class="backup-copy"><strong>استعادة نسخة احتياطية</strong><p>استيراد ملف سبق تصديره من المشروع.</p></div><label class="outline-button file-button">اختيار ملف<input type="file" id="importInput" accept=".json,application/json" hidden></label></div>
+          <div class="backup-row hidden" id="preV8Row"><div class="backup-icon"><i data-icon="download"></i></div><div class="backup-copy"><strong>نسخة ما قبل دمج الرفايع</strong><p>حفظنا بياناتك تلقائيًا قبل دمج فئتي الرفايع. حمّليها لو احتجتي ترجعي لأي حاجة منها.</p></div><button class="outline-button" id="preV8Button" type="button">تنزيل النسخة</button></div>
+          <div class="backup-row hidden" id="preV9Row"><div class="backup-icon"><i data-icon="download"></i></div><div class="backup-copy"><strong>نسخة ما قبل سجل المشتريات</strong><p>حفظنا بياناتك تلقائيًا قبل إضافة سجل المشتريات. حمّليها لو احتجتي ترجعي لأي حاجة منها.</p></div><button class="outline-button" id="preV9Button" type="button">تنزيل النسخة</button></div>
           <div class="backup-row hidden" id="preV5Row"><div class="backup-icon"><i data-icon="download"></i></div><div class="backup-copy"><strong>نسخة ما قبل تحديث الفئات</strong><p>حفظنا بياناتك القديمة تلقائيًا قبل تحديث الفئات. حمّليها لو احتجتي ترجعي لأي حاجة منها.</p></div><button class="outline-button" id="preV5Button" type="button">تنزيل النسخة</button></div>
-          <div class="danger-zone"><div><strong>إعادة ضبط بيانات المشروع</strong><p>تحذف كل بيانات القائمة المحفوظة في هذا المتصفح.</p></div><button class="danger-button" id="resetButton">مسح كل البيانات</button></div>
+          </section>
         </section>
-        <section class="panel welcome-help-panel"><div class="panel-heading"><div><h3>عن الموقع وكيفية الاستخدام</h3><p class="muted">تعرفي على المزايا وطريقة الاستخدام والخصوصية، أو أعيدي الجولة الترحيبية.</p></div><span class="round-icon"><i data-icon="sparkles"></i></span></div><div class="about-actions"><a class="outline-button" href="#/about">دليل Bride List</a><button class="outline-button" type="button" id="replayWelcomeButton">إعادة الجولة الترحيبية</button></div></section>
-        <section class="panel about-panel"><div class="about-logo"><img src="assets/img/logo-384.webp" alt="لوجو Bride List" width="384" height="384" decoding="async"></div><div><h3>Bride List</h3><p class="muted">نسختك الشخصية لتنظيم تجهيزاتك خطوة بخطوة.</p><span class="privacy-note"><span class="privacy-dot"></span> لا يوجد تسجيل دخول أو قاعدة بيانات. بياناتك محفوظة محليًا في متصفحك.</span></div></section>
+
+        <section class="settings-group" id="set-data" aria-labelledby="g-data">
+          <h2 class="group-title" id="g-data">إعدادات البيانات</h2>
+          <section class="panel data-panel">
+            <p class="muted">بياناتك محفوظة في هذا المتصفح فقط. لو حبيتي تبدأي من الأول، صدّري نسخة احتياطية الأول ثم امسحي البيانات.</p>
+            <div class="danger-zone"><div><strong>مسح كل بيانات القائمة</strong><p>يحذف الفئات والبنود والمشتريات المحفوظة في هذا المتصفح ويرجّع القائمة الافتراضية. لا يمكن التراجع.</p></div><button class="danger-button" id="resetButton" type="button" aria-haspopup="dialog">مسح كل البيانات…</button></div>
+          </section>
+        </section>
+
+        <section class="settings-group" id="set-privacy" aria-labelledby="g-privacy">
+          <h2 class="group-title" id="g-privacy">الخصوصية</h2>
+          <section class="panel privacy-panel">
+            <span class="privacy-note"><span class="privacy-dot"></span> لا يوجد تسجيل دخول أو قاعدة بيانات. بياناتك محفوظة محليًا في متصفحك.</span>
+            <div class="about-actions">
+              <button type="button" class="outline-button" data-consent-settings>إعدادات الخصوصية والإعلانات</button>
+              <a class="outline-button" href="/privacy/">سياسة الخصوصية</a>
+              <a class="outline-button" href="/terms/">شروط الاستخدام</a>
+            </div>
+          </section>
+        </section>
+
+        <section class="settings-group" id="set-info" aria-labelledby="g-info">
+          <h2 class="group-title" id="g-info">معلومات التطبيق والإصدار</h2>
+          <section class="panel about-panel"><div class="about-logo"><img src="assets/img/logo-384.webp" alt="لوجو Bride List" width="384" height="384" decoding="async"></div><div><h3>Bride List</h3><p class="muted">نسختك الشخصية لتنظيم تجهيزاتك خطوة بخطوة.</p><span class="app-version" data-app-version>الإصدار</span></div></section>
+          <section class="panel welcome-help-panel"><div class="panel-heading"><div><h3>عن الموقع وكيفية الاستخدام</h3><p class="muted">تعرفي على المزايا وطريقة الاستخدام والخصوصية، أو أعيدي الجولة الترحيبية.</p></div><span class="round-icon"><i data-icon="sparkles"></i></span></div><div class="about-actions"><a class="outline-button" href="#/about">دليل Bride List</a><button class="outline-button" type="button" id="replayWelcomeButton">إعادة الجولة الترحيبية</button></div></section>
+        </section>
       </section>
 
       <!-- دليل الموقع -->
@@ -408,10 +480,17 @@
     <a href="#/categories" data-nav="categories" aria-label="الفئات"><i data-icon="grid"></i><span>الفئات</span></a>
     <a href="#/items" data-nav="items" aria-label="كل البنود"><i data-icon="list"></i><span>البنود</span></a>
     <a href="#/budget" data-nav="budget" aria-label="الميزانية"><i data-icon="wallet"></i><span>الميزانية</span></a>
-    <a href="#/tips" data-nav="tips" aria-label="النصائح الذهبية"><i data-icon="bulb"></i><span>النصائح</span></a>
-    <a href="#/about" data-nav="about" aria-label="عن الموقع"><i data-icon="heart"></i><span>عن الموقع</span></a>
-    <a href="#/settings" data-nav="settings" aria-label="الإعدادات والنسخ الاحتياطي"><i data-icon="settings"></i><span>الإعدادات</span></a>
+    <button type="button" class="nav-more" id="moreButton" data-nav="more" aria-haspopup="dialog" aria-controls="moreSheet" aria-label="المزيد: النصائح وعن الموقع والإعدادات"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg><span>المزيد</span></button>
   </nav>
+
+  <dialog class="more-sheet" id="moreSheet" aria-labelledby="moreTitle">
+    <div class="more-sheet-body">
+      <div class="more-sheet-head"><h2 id="moreTitle">المزيد</h2><button type="button" class="dialog-close" id="closeMore" aria-label="إغلاق"><i data-icon="x"></i></button></div>
+      <a href="#/tips" data-nav="tips"><span class="more-ic"><i data-icon="bulb"></i></span><span class="more-copy"><strong>النصائح الذهبية</strong><small>جداول التجهيز وقوائم المراجعة</small></span></a>
+      <a href="#/about" data-nav="about"><span class="more-ic"><i data-icon="heart"></i></span><span class="more-copy"><strong>عن الموقع</strong><small>كيف تستفيدين من Bride List</small></span></a>
+      <a href="#/settings" data-nav="settings"><span class="more-ic"><i data-icon="settings"></i></span><span class="more-copy"><strong>الإعدادات</strong><small>التثبيت والنسخ الاحتياطي والبيانات</small></span></a>
+    </div>
+  </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -430,18 +509,72 @@
     <form id="itemForm">
       <div class="dialog-heading"><div><p class="eyebrow">تفاصيل التجهيز</p><h2 id="dialogTitle">إضافة بند جديد</h2></div><button type="button" class="dialog-close" id="closeDialog" aria-label="إغلاق"><i data-icon="x"></i></button></div>
       <input type="hidden" id="itemId">
-      <div class="form-grid">
-        <label class="wide">اسم البند <input id="itemName" required maxlength="100" placeholder="مثال: ملايات سرير"></label>
-        <label>الفئة <div class="select-with-add"><select id="itemCategory" required></select><button type="button" id="addCategoryInline" title="إضافة فئة" aria-label="إضافة فئة"><i data-icon="plus"></i></button></div></label>
-        <label>وحدة القياس <input id="itemUnit" maxlength="25" value="قطعة" placeholder="قطعة / طقم / جهاز"></label>
-        <label>الكمية المطلوبة <input id="itemRequired" type="number" min="0" step="1" value="1" required inputmode="numeric"></label>
-        <label>الكمية المشتراة <input id="itemPurchased" type="number" min="0" step="1" value="0" required inputmode="numeric"></label>
-        <label>سعر الوحدة بالجنيه <input id="itemPrice" type="number" min="0" step="0.01" placeholder="اختياري" inputmode="decimal"></label>
-        <label>حالة التجهيز <select id="itemStatus"><option value="missing">لم يبدأ</option><option value="preparing">قيد التجهيز</option><option value="complete">مكتمل</option></select></label>
-        <label class="wide">ملاحظات <textarea id="itemNotes" rows="2" maxlength="500" placeholder="مقاس، لون، موديل أو أي ملاحظات..."></textarea></label>
-      </div>
-      <p class="form-hint">الحالة بتتحدد تلقائيًا من الكميات. الكمية المشتراة لا يمكن أن تتجاوز المطلوبة، والسعر اختياري.</p>
+      <fieldset class="form-group"><legend>البند</legend>
+        <div class="form-grid">
+          <label class="wide">اسم البند <input id="itemName" required data-msg="اكتبي اسم البند." maxlength="100" placeholder="مثال: ملايات سرير"></label>
+          <label>الفئة <div class="select-with-add"><select id="itemCategory" required></select><button type="button" id="addCategoryInline" title="إضافة فئة" aria-label="إضافة فئة"><i data-icon="plus"></i></button></div></label>
+          <label>وحدة القياس <input id="itemUnit" maxlength="25" value="قطعة" placeholder="قطعة / طقم / جهاز"></label>
+        </div></fieldset>
+      <fieldset class="form-group"><legend>الكمية والتسعير</legend>
+        <div class="form-grid">
+          <label>الكمية المطلوبة <input id="itemRequired" type="number" min="0" step="1" value="1" required data-msg="اكتبي الكمية المطلوبة." inputmode="numeric"></label>
+          <label>سعر الوحدة التقديري (ج.م) <input id="itemPrice" type="number" min="0" step="0.01" placeholder="اختياري" inputmode="decimal"></label>
+          <label class="wide">حالة التجهيز <select id="itemStatus"><option value="missing">لم يبدأ</option><option value="preparing">قيد التجهيز</option><option value="complete" hidden>مكتمل</option></select></label>
+        </div></fieldset>
+      <fieldset class="form-group"><legend>ملاحظات</legend>
+        <div class="form-grid"><label class="wide">ملاحظات <textarea id="itemNotes" rows="2" maxlength="500" placeholder="مقاس، لون، موديل أو أي ملاحظات..."></textarea></label></div>
+      </fieldset>
+      <p class="form-hint">الكمية المشتراة والمصروف بيتحسبوا تلقائيًا من «سجل المشتريات» بتاع كل بند. سعر الوحدة هنا تقديري فقط، بيُستخدم لتقدير تكلفة الكميات المتبقية، واختياري.</p>
       <div class="dialog-actions"><button type="button" class="outline-button" id="cancelDialog">إلغاء</button><button type="submit" class="primary-button">حفظ البند</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="item-dialog purchase-dialog" id="purchaseLogDialog" aria-labelledby="plTitle">
+    <div class="pl-wrap">
+      <div class="dialog-heading"><div><p class="eyebrow">سجل المشتريات</p><h2 id="plTitle">—</h2></div><button type="button" class="dialog-close" id="closePurchaseLog" aria-label="إغلاق"><i data-icon="x"></i></button></div>
+      <p class="pl-msg" id="plMsg" role="status" aria-live="polite" hidden></p>
+      <div id="plSummary"></div>
+      <div id="plBody"></div>
+    </div>
+  </dialog>
+
+  <dialog class="item-dialog purchase-dialog" id="purchaseDialog" aria-labelledby="pdTitle">
+    <form id="purchaseForm" novalidate>
+      <div class="dialog-heading"><div><p class="eyebrow" id="pdItemName"></p><h2 id="pdTitle">تسجيل شراء</h2></div><button type="button" class="dialog-close" id="closePurchase" aria-label="إغلاق"><i data-icon="x"></i></button></div>
+      <input type="hidden" id="pdItemId"><input type="hidden" id="pdId">
+      <p class="pd-left" id="pdLeft" role="status"></p>
+      <div class="form-grid pd-main">
+        <label>الكمية في هذه العملية <input id="pdQty" type="number" min="1" step="1" inputmode="numeric" required></label>
+        <label>إجمالي سعر العملية (ج.م) <input id="pdTotal" type="number" min="0" step="0.01" inputmode="decimal" placeholder="اختياري"></label>
+        <p class="pd-unit wide" id="pdUnit" aria-live="polite"></p>
+        <label>تاريخ الشراء <input id="pdDate" type="date"></label>
+        <label>المحل أو المورد <input id="pdStore" maxlength="80" placeholder="اختياري"></label>
+      </div>
+      <details class="pd-section" id="pdDetailsBox" open>
+        <summary>تفاصيل المنتج <small id="pdTypeNote"></small></summary>
+        <div class="form-grid">
+          <label class="wide">نوع التفاصيل <select id="pdType"></select></label>
+          <div class="pd-fields wide" id="pdFields"></div>
+        </div>
+      </details>
+      <details class="pd-section" id="pdCustomBox">
+        <summary>تفاصيل مخصصة <small id="pdCustomCount"></small></summary>
+        <div id="pdCustomList" class="pd-custom"></div>
+        <button type="button" class="outline-button pd-add-custom" id="pdAddCustom">+ إضافة تفصيلة</button>
+      </details>
+      <details class="pd-section" id="pdMoreBox">
+        <summary>ملاحظات وصورة</summary>
+        <div class="form-grid">
+          <label class="wide">ملاحظات <textarea id="pdNotes" rows="2" maxlength="500" placeholder="أي ملاحظات إضافية..."></textarea></label>
+          <div class="wide pd-image">
+            <img id="pdImgPreview" alt="" hidden>
+            <p class="form-hint" id="pdImgHint">صورة المنتج أو الفاتورة (اختياري): JPG أو PNG أو WebP، بحد أقصى 8 ميجا، وبتتصغّر وتتحفظ على جهازك فقط.</p>
+            <div class="pd-image-actions"><label class="outline-button pd-pick">اختيار صورة<input type="file" id="pdImgInput" accept="image/jpeg,image/png,image/webp" hidden></label><button type="button" class="outline-button" id="pdImgRemove" hidden>حذف الصورة</button></div>
+          </div>
+        </div>
+      </details>
+      <p class="pd-error" id="pdError" role="alert" hidden></p>
+      <div class="dialog-actions pd-actions"><button type="button" class="outline-button" id="cancelPurchase">إلغاء</button><button type="submit" class="primary-button" id="savePurchase">حفظ العملية</button></div>
     </form>
   </dialog>
 
@@ -449,7 +582,7 @@
     <form id="categoryForm">
       <div class="dialog-heading"><div><p class="eyebrow">تنظيم قائمتك</p><h2 id="categoryDialogTitle">إضافة فئة جديدة</h2></div><button type="button" class="dialog-close" id="closeCategoryDialog" aria-label="إغلاق"><i data-icon="x"></i></button></div>
       <input type="hidden" id="categoryId">
-      <label>اسم الفئة<input id="categoryName" required maxlength="60" placeholder="مثال: أدوات المطبخ"></label>
+      <label>اسم الفئة<input id="categoryName" required data-msg="اكتبي اسم الفئة." maxlength="60" placeholder="مثال: أدوات المطبخ"></label>
       <label>وصف مختصر <span class="optional">(اختياري)</span><input id="categoryDesc" maxlength="120" placeholder="مثال: كل اللي محتاجاه للمطبخ"></label>
       <fieldset class="icon-picker"><legend>أيقونة الفئة</legend><div id="iconPicker" role="radiogroup"></div></fieldset>
       <div class="dialog-actions"><button type="button" class="outline-button" id="cancelCategory">إلغاء</button><button class="primary-button" type="submit">حفظ الفئة</button></div>
@@ -466,13 +599,33 @@
     </form>
   </dialog>
 
+  <dialog class="small-dialog install-guide" id="installGuideDialog" aria-labelledby="igTitle">
+    <div class="ig-wrap">
+      <div class="dialog-heading"><div><p class="eyebrow">تثبيت التطبيق</p><h2 id="igTitle" data-guide-title>تثبيت Bride List</h2></div><button type="button" class="dialog-close" data-install-guide-close aria-label="إغلاق"><i data-icon="x"></i></button></div>
+      <p class="ig-intro" data-guide-intro></p>
+      <ol class="ig-steps" data-guide-steps></ol>
+      <p class="ig-note" data-guide-note hidden></p>
+      <div class="dialog-actions"><button type="button" class="primary-button" data-install-guide-close>فهمت</button></div>
+    </div>
+  </dialog>
+
+  <dialog class="small-dialog confirm-dialog" id="resetDialog" aria-labelledby="resetTitle">
+    <form id="resetForm" novalidate>
+      <div class="dialog-heading"><div><p class="eyebrow">إجراء لا يمكن التراجع عنه</p><h2 id="resetTitle">مسح كل بيانات القائمة؟</h2></div><button type="button" class="dialog-close" id="closeReset" aria-label="إغلاق"><i data-icon="x"></i></button></div>
+      <p class="confirm-text">سيتم حذف كل الفئات والبنود وسجل المشتريات والإعدادات المحفوظة في هذا المتصفح، وإرجاع القائمة الافتراضية.</p>
+      <button type="button" class="outline-button full-width" id="resetExportFirst"><i data-icon="download"></i> تصدير نسخة احتياطية أولًا</button>
+      <label class="check-row"><input type="checkbox" id="resetAck"> <span>فهمت أن المسح نهائي وأنني تأكدت من النسخة الاحتياطية</span></label>
+      <div class="dialog-actions"><button type="button" class="outline-button" id="cancelReset">إلغاء</button><button type="submit" class="danger-button strong" id="confirmReset" disabled>مسح كل البيانات</button></div>
+    </form>
+  </dialog>
+
   <script src="assets/js/icons.js" defer></script>
   <script src="assets/js/catalog.js" defer></script>
   <script src="assets/js/tips.js" defer></script>
-  <script src="assets/js/storage.js" defer></script>
+  <script src="assets/js/purchases.js" defer></script>
   <script src="assets/js/calc.js" defer></script>
+  <script src="assets/js/storage.js" defer></script>
   <script src="assets/js/app.js" defer></script>
-  <script src="assets/js/pwa.js" defer></script>
   <script src="assets/js/pwa.js" defer></script>
 </body>
 </html>

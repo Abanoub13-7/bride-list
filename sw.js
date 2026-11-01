@@ -2,9 +2,9 @@
    الاستراتيجية: «الشبكة أولًا» لكل الملفات الثابتة من نفس الموقع مع نسخة احتياطية في الكاش، فيحصل الزائر على أحدث نسخة دائمًا
    عند وجود اتصال، ويعمل التطبيق دون اتصال بآخر نسخة زارها. لا يُخزَّن شيء من بيانات المستخدم هنا (بياناته في localStorage فقط)،
    ولا تُخزَّن طلبات /api/ ولا أي طلب لموقع آخر (Google وغيرها). لتحديث النسخة: غيّري CACHE_VERSION عند كل نشر. */
-const CACHE_VERSION = "bride-list-2026-10-30-v7";
+const CACHE_VERSION = "bride-list-2026-11-01-v11";
 const CORE = ["/", "/offline/", "/manifest.webmanifest", "/assets/css/style.css", "/assets/css/pages.css", "/assets/js/site-config.js", "/assets/js/consent.js",
-  "/assets/js/icons.js", "/assets/js/catalog.js", "/assets/js/tips.js", "/assets/js/storage.js", "/assets/js/calc.js", "/assets/js/app.js", "/assets/js/pwa.js",
+  "/assets/js/icons.js", "/assets/js/catalog.js", "/assets/js/tips.js", "/assets/js/purchases.js", "/assets/js/calc.js", "/assets/js/storage.js", "/assets/js/app.js", "/assets/js/pwa.js",
   "/assets/img/logo-120.webp", "/assets/img/logo-384.webp", "/assets/img/logo-192.png", "/assets/img/default-bride.webp"];
 const NETWORK_TIMEOUT = 4000;
 

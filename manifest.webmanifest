@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Bride List — قائمة جهاز العروسة",
   "short_name": "Bride List",
   "description": "نظّمي جهاز العروسة وتجهيز البيت، وتابعي البنود والمشتريات والميزانية.",
@@ -6,14 +7,25 @@
   "dir": "rtl",
   "start_url": "/",
   "scope": "/",
-  "id": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#faf4f0",
   "theme_color": "#faf4f0",
+  "categories": ["lifestyle", "productivity", "shopping"],
+  "prefer_related_applications": false,
+  "related_applications": [
+    { "platform": "webapp", "url": "/manifest.webmanifest" }
+  ],
   "icons": [
     { "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/assets/img/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/assets/img/logo-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "كل البنود", "short_name": "البنود", "description": "استعراض البنود وتسجيل المشتريات", "url": "/#/items", "icons": [{ "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "الميزانية", "short_name": "الميزانية", "description": "متابعة الميزانية والمصروفات", "url": "/#/budget", "icons": [{ "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "فئات التجهيز", "short_name": "الفئات", "description": "تقدّم كل فئة", "url": "/#/categories", "icons": [{ "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "النصائح الذهبية", "short_name": "النصائح", "description": "جداول التجهيز وقوائم المراجعة", "url": "/#/tips", "icons": [{ "src": "/assets/img/logo-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
