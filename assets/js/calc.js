@@ -2,15 +2,53 @@
 (() => {
   const num = v => (Number.isFinite(Number(v)) ? Number(v) : 0);
 
+  /* ---------- سجل المشتريات: مصدر الحقيقة الوحيد للكمية المشتراة والمصروف ----------
+     بند بالنظام الجديد: it.purchases = [{qty, totalPrice|null, ...}] + it.legacy = {qty, unitPrice|null} | null
+       legacy = «بيانات شراء سابقة غير مفصلة» رُحّلت من النسخة القديمة (كمية وسعر وحدة فقط، بلا تواريخ ولا تفاصيل مخترعة).
+     بند بلا it.purchases (بيانات خام قديمة/اختبارات): نعامل it.purchased × it.unitPrice كما كان سابقًا، فلا يتغير أي رقم قديم.
+     totalPrice = null  → «سعر غير مسجل» (ليس صفرًا)؛ totalPrice = 0 → سعر مسجل يساوي صفرًا. */
+  const hasPurchaseModel = it => Array.isArray(it.purchases);
+  const priceKnown = v => v !== null && v !== undefined && v !== "" && Number.isFinite(Number(v)) && Number(v) >= 0;
+  const qtyOfRec = r => Math.max(0, Math.floor(num(r && r.qty)));
+  function purchaseParts(it) {
+    if (!hasPurchaseModel(it)) {
+      const q = Math.max(0, num(it.purchased)), known = priceKnown(it.unitPrice);
+      return q > 0 ? [{ qty: q, total: known ? q * Number(it.unitPrice) : null, legacy: true }] : [];
+    }
+    const parts = [];
+    const lg = it.legacy;
+    if (lg && qtyOfRec(lg) > 0) { const q = qtyOfRec(lg); parts.push({ qty: q, total: priceKnown(lg.unitPrice) ? q * Number(lg.unitPrice) : null, legacy: true }); }
+    for (const r of it.purchases) { const q = qtyOfRec(r); if (q > 0) parts.push({ qty: q, total: priceKnown(r.totalPrice) ? Number(r.totalPrice) : null, legacy: false }); }
+    return parts;
+  }
+  const purchasedQty = it => purchaseParts(it).reduce((s, p) => s + p.qty, 0);
+  /* إنفاق البند: total = مجموع المبالغ المعروفة فقط، unknownQty = كمية بلا سعر مسجل (ليست مجانية) */
+  function itemSpend(it) {
+    let total = 0, pricedQty = 0, unknownQty = 0, pricedParts = 0;
+    for (const p of purchaseParts(it)) { if (p.total === null) unknownQty += p.qty; else { total += p.total; pricedQty += p.qty; pricedParts++; } }
+    return { total: Math.round(total * 100) / 100, pricedQty, unknownQty, pricedParts, qty: pricedQty + unknownQty };
+  }
+  /* ملخص البند الكامل لواجهة بطاقة البند وسجل المشتريات */
+  function purchaseSummary(it) {
+    const sp = itemSpend(it), required = Math.max(0, num(it.required)), qty = sp.qty;
+    const recs = hasPurchaseModel(it) ? it.purchases.length : 0, legacyQty = hasPurchaseModel(it) && it.legacy ? qtyOfRec(it.legacy) : 0;
+    return {
+      required, purchasedQty: qty, remainingQty: Math.max(0, required - qty), excessQty: Math.max(0, qty - required),
+      recordCount: recs, hasLegacy: legacyQty > 0, legacyQty,
+      spent: sp.total, hasSpent: sp.pricedParts > 0, unpricedQty: sp.unknownQty,
+      avgUnit: sp.pricedQty > 0 ? Math.round((sp.total / sp.pricedQty) * 100) / 100 : null    /* null = «غير متاح» لا صفر مضلل */
+    };
+  }
+  const remaining = it => Math.max(0, num(it.required) - purchasedQty(it));
+  const excessQty = it => Math.max(0, purchasedQty(it) - Math.max(0, num(it.required)));
+
   /* حالة البند تُشتق دائمًا من الكميات (مع استثناء «قيد التجهيز» اليدوي عندما المشترى = 0). */
   function itemStatus(it) {
-    const required = Math.max(0, num(it.required));
-    const purchased = Math.min(Math.max(0, num(it.purchased)), required);
+    const required = Math.max(0, num(it.required)), purchased = Math.max(0, purchasedQty(it));
     if (required > 0 && purchased >= required) return "complete";
     if (purchased > 0) return "preparing";
     return it.status === "preparing" ? "preparing" : "missing";
   }
-  const remaining = it => Math.max(0, num(it.required) - num(it.purchased));
 
   /* نسبة الإنجاز = مجموع المشترى ÷ مجموع المطلوب × 100 (0% لو المطلوب صفر). */
   function percentOf(purchased, required) {
@@ -20,11 +58,13 @@
   }
 
   function summarize(items) {
-    const out = { total: items.length, complete: 0, preparing: 0, missing: 0, requiredQty: 0, purchasedQty: 0, remainingQty: 0, percent: 0 };
+    const out = { total: items.length, complete: 0, preparing: 0, missing: 0, requiredQty: 0, purchasedQty: 0, remainingQty: 0, excessQty: 0, percent: 0 };
     for (const it of items) {
       out[itemStatus(it)]++;
-      out.requiredQty += num(it.required);
-      out.purchasedQty += Math.min(num(it.purchased), num(it.required));
+      const req = Math.max(0, num(it.required)), bought = purchasedQty(it);
+      out.requiredQty += req;
+      out.purchasedQty += Math.min(bought, req);          /* الزيادة عن المطلوب لا ترفع نسبة الإنجاز */
+      out.excessQty += Math.max(0, bought - req);
     }
     out.remainingQty = out.requiredQty - out.purchasedQty;
     out.percent = percentOf(out.purchasedQty, out.requiredQty);
@@ -40,16 +80,29 @@
     return "missing";
   }
 
-  function cost(items, qtyOf) {
-    const priced = items.filter(it => it.unitPrice !== null && it.unitPrice !== undefined);
-    return { total: priced.reduce((s, it) => s + qtyOf(it) * it.unitPrice, 0), incomplete: priced.length !== items.length, pricedCount: priced.length };
+  /* التكاليف — كلها من مصدر واحد:
+       المصروف (purchasedCost) = مجموع إنفاق سجل المشتريات المسعّر (والبيانات السابقة المرحّلة بسعرها المسجل).
+       تقدير الباقي (remainingCost) = الكمية المتبقية × سعر تقديري: سعر وحدة البند التقديري لو محدد، وإلا متوسط سعر ما اشتُري فعلًا، وإلا «غير مسعّر».
+       تكلفة القائمة (requiredCost) = المصروف + تقدير الباقي → لا يُحسب أي مبلغ مرتين.
+     السعر الصفري سعر مسجَّل؛ الكمية بلا سعر لا تُحسب مجانية بل تجعل الناتج «غير مكتمل». */
+  const hasPrice = it => priceKnown(it.unitPrice);
+  function estimateUnit(it, sp) {
+    if (hasPrice(it)) return Number(it.unitPrice);
+    return sp.pricedQty > 0 ? sp.total / sp.pricedQty : null;
   }
   function costs(items) {
-    return {
-      requiredCost: cost(items, it => num(it.required)),
-      purchasedCost: cost(items, it => num(it.purchased)),
-      remainingCost: cost(items, remaining)
-    };
+    const r = { total: 0, priced: 0, unpriced: 0 }, p = { total: 0, priced: 0, unpriced: 0 }, m = { total: 0, priced: 0, unpriced: 0 };
+    for (const it of items) {
+      const sp = itemSpend(it), remQty = remaining(it), est = estimateUnit(it, sp);
+      p.total += sp.total; if (sp.pricedQty > 0) p.priced++; if (sp.unknownQty > 0) p.unpriced++;
+      r.total += sp.total; if (sp.pricedQty > 0) r.priced++; if (sp.unknownQty > 0) r.unpriced++;
+      if (remQty > 0) {
+        if (est !== null) { m.total += remQty * est; m.priced++; r.total += remQty * est; r.priced = r.priced + (sp.pricedQty > 0 ? 0 : 1); }
+        else { m.unpriced++; r.unpriced = r.unpriced + (sp.unknownQty > 0 ? 0 : 1); }
+      }
+    }
+    const fin = o => ({ total: Math.round(o.total * 100) / 100, incomplete: o.unpriced > 0, pricedCount: o.priced, unpricedCount: o.unpriced });
+    return { requiredCost: fin(r), purchasedCost: fin(p), remainingCost: fin(m) };
   }
 
   /* أيام متبقية بالتقويم المحلي (بدون UTC ولا مشاكل التوقيت الصيفي). null = غير محدد/غير صالح */
@@ -92,17 +145,45 @@
   }
 
   /* أرقام فئة واحدة: الميزانية مقابل تكلفة القائمة والمشتريات والمتبقي. */
+  /* التعريفات (ثابتة في كل الواجهة):
+       تكلفة القائمة المسعّرة = Σ (الكمية المطلوبة × سعر الوحدة) للبنود المسعّرة فقط — ليست التكلفة الكاملة لو بقيت بنود بلا سعر.
+       تكلفة ما تم شراؤه   = Σ (الكمية المشتراة × سعر الوحدة) — تقدير بالأسعار الحالية وليست مبلغًا مدفوعًا مسجَّلًا.
+       تكلفة الكميات المتبقية = Σ (المطلوب − المشترى) × سعر الوحدة.
+       المتبقي من ميزانية الفئة = الميزانية − تكلفة القائمة المسعّرة (سالب = تجاوز). «بعد المشتريات» = الميزانية − تكلفة ما تم شراؤه. */
   function categoryBudget(cat, items) {
     const c = costs(items), has = isSet(cat.budget), budget = has ? Number(cat.budget) : null;
-    const spent = c.purchasedCost.total;
+    const planned = c.requiredCost.total, bought = c.purchasedCost.total;
+    const left = has ? money2(budget - planned) : null;
+    const over = has && planned > budget;
     return {
       budget, isSet: has,
       requiredCost: c.requiredCost, purchasedCost: c.purchasedCost, remainingCost: c.remainingCost,
-      left: has ? money2(budget - spent) : null,                                // المتبقي من ميزانية الفئة بعد المشتريات
-      usedPercent: has && budget > 0 ? Math.round((spent / budget) * 100) : null,
-      requiredOver: has && c.requiredCost.total > budget ? money2(c.requiredCost.total - budget) : 0
+      unpricedCount: c.requiredCost.unpricedCount, partial: c.requiredCost.incomplete,
+      left,                                                                       // المتبقي من الميزانية بعد تكلفة القائمة المسعّرة (سالب لو تجاوز)
+      leftAfterPurchases: has ? money2(budget - bought) : null,                   // المتبقي بعد ما تم شراؤه فقط
+      over, overBy: over ? money2(planned - budget) : 0,
+      status: !has ? "unset" : over ? "over" : "within",
+      usedPercent: has && budget > 0 ? Math.round((planned / budget) * 100) : null,
+      boughtPercent: has && budget > 0 ? Math.round((bought / budget) * 100) : null,
+      requiredOver: over ? money2(planned - budget) : 0                           // اسم قديم محفوظ للتوافق
     };
   }
 
-  window.BrideCalc = { budgetPlan, categoryBudget, isBudgetSet: isSet, itemStatus, remaining, percentOf, summarize, categoryState, costs, daysUntil };
+  /* ملخص واحد تقرؤه الرئيسية وصفحة الميزانية معًا (فلا تختلف الأرقام بين الصفحتين). */
+  function overview(totalBudget, categories, items) {
+    const plan = budgetPlan(totalBudget, categories), c = costs(items);
+    const planned = c.requiredCost.total, bought = c.purchasedCost.total, total = plan.total;
+    const hasTotal = total !== null && total > 0;
+    return {
+      plan, requiredCost: c.requiredCost, purchasedCost: c.purchasedCost, remainingCost: c.remainingCost, spent: c.purchasedCost.total,
+      unpricedCount: c.requiredCost.unpricedCount, pricedCount: c.requiredCost.pricedCount, partial: c.requiredCost.incomplete,
+      hasGauge: hasTotal,
+      over: hasTotal && planned > total, overBy: hasTotal && planned > total ? money2(planned - total) : 0,
+      left: hasTotal ? money2(total - planned) : null,
+      usedPercent: hasTotal ? Math.round((planned / total) * 100) : null,
+      boughtPercent: hasTotal ? Math.round((bought / total) * 100) : null
+    };
+  }
+
+  window.BrideCalc = { budgetPlan, categoryBudget, overview, hasPrice, isBudgetSet: isSet, itemStatus, remaining, excessQty, purchasedQty, itemSpend, purchaseSummary, percentOf, summarize, categoryState, costs, daysUntil };
 })();
