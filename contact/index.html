@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تواصل معنا | Bride List</title>
-<meta name="description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<meta name="description" content="تواصلي مع فريق Bride List لإرسال ملاحظة أو الإبلاغ عن خطأ أو اقتراح تحسين، عبر نموذج التواصل أو البريد الإلكتروني.">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 <link rel="canonical" href="https://bride-list.vercel.app/contact/">
 <meta name="theme-color" content="#faf4f0">
@@ -20,11 +20,11 @@
 <meta property="og:site_name" content="Bride List">
 <meta property="og:url" content="https://bride-list.vercel.app/contact/">
 <meta property="og:title" content="تواصل معنا | Bride List">
-<meta property="og:description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<meta property="og:description" content="تواصلي مع فريق Bride List لإرسال ملاحظة أو الإبلاغ عن خطأ أو اقتراح تحسين، عبر نموذج التواصل أو البريد الإلكتروني.">
 <meta property="og:image" content="https://bride-list.vercel.app/assets/img/logo.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="تواصل معنا | Bride List">
-<meta name="twitter:description" content="أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.">
+<meta name="twitter:description" content="تواصلي مع فريق Bride List لإرسال ملاحظة أو الإبلاغ عن خطأ أو اقتراح تحسين، عبر نموذج التواصل أو البريد الإلكتروني.">
 <link rel="stylesheet" href="/assets/css/pages.css">
 <script src="/assets/js/site-config.js"></script>
 <script src="/assets/js/consent.js"></script>
@@ -38,7 +38,7 @@
    "url": "https://bride-list.vercel.app/contact/",
    "name": "تواصل معنا",
    "headline": "تواصل معنا",
-   "description": "أرسلي ملاحظتك أو بلّغي عن خطأ في Bride List عبر نموذج التواصل.",
+   "description": "تواصلي مع فريق Bride List لإرسال ملاحظة أو الإبلاغ عن خطأ أو اقتراح تحسين، عبر نموذج التواصل أو البريد الإلكتروني.",
    "inLanguage": "ar-EG",
    "isPartOf": {
     "@id": "https://bride-list.vercel.app/#website"
@@ -78,11 +78,12 @@
 </header>
 <main id="main">
 <article class="doc"><nav class="crumbs" aria-label="مسار التنقل"><a href="/">الرئيسية</a> ‹ <span aria-current="page">تواصل معنا</span></nav><h1>تواصل معنا</h1>
-<p class="lead">يسعدنا أن نسمع ملاحظاتك، سواء أخطاء في المحتوى أو مشكلة في الأداة أو اقتراحًا لتحسين الموقع.</p>
-<div id="contact-box" class="callout note" hidden><p><strong>بريد التواصل:</strong> <span id="contact-slot"></span></p></div>
+<p class="lead">يسعدنا أن نسمع منك، سواء كانت ملاحظة على المحتوى، أو مشكلة في الأداة، أو اقتراحًا لتحسين الموقع. نقرأ كل رسالة ونردّ على ما يحتاج إلى رد.</p>
+<div id="contact-box" class="callout note"><p><strong>البريد الإلكتروني للتواصل:</strong> <a href="mailto:abncodee13@gmail.com" dir="ltr">abncodee13@gmail.com</a></p><p>يمكنك مراسلتنا مباشرة على هذا البريد، أو استخدام النموذج أدناه.</p></div>
+<h2>نموذج التواصل</h2>
 <form id="contact-form" class="contact-form" novalidate>
   <div class="field"><label for="c-name">الاسم</label><input id="c-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="name-err"><p class="field-err" id="name-err" role="alert"></p></div>
-  <div class="field"><label for="c-email">البريد الإلكتروني</label><input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr" maxlength="120" required aria-describedby="email-err"><p class="field-err" id="email-err" role="alert"></p></div>
+  <div class="field"><label for="c-email">بريدك الإلكتروني (لنرد عليك)</label><input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr" maxlength="120" required aria-describedby="email-err"><p class="field-err" id="email-err" role="alert"></p></div>
   <div class="field"><label for="c-subject">موضوع الرسالة</label><input id="c-subject" name="subject" type="text" maxlength="120" required aria-describedby="subject-err"><p class="field-err" id="subject-err" role="alert"></p></div>
   <div class="field"><label for="c-message">نص الرسالة</label><textarea id="c-message" name="message" rows="6" maxlength="2000" required aria-describedby="message-err"></textarea><p class="field-err" id="message-err" role="alert"></p></div>
   <div class="hp" aria-hidden="true"><label>لا تملئي هذا الحقل<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -90,13 +91,9 @@
   <button id="contact-submit" class="btn" type="submit">إرسال الرسالة</button>
   <p id="contact-status" class="form-status" role="status" aria-live="polite" hidden></p>
 </form>
-<h2>ماذا تكتبين عند التواصل؟</h2>
-<ul><li>الصفحة أو القسم المقصود.</li><li>وصف المشكلة أو الاقتراح.</li><li>نوع الجهاز والمتصفح إن كانت المشكلة تقنية.</li></ul>
-<p class="disc">لا تُرسلي كلمات مرور أو أرقام بطاقات أو بيانات حساسة. تُستخدم بياناتك في النموذج للرد عليك فقط، انظري <a href="/privacy/">سياسة الخصوصية</a>.</p>
-<script>
-(function(){var c=window.BRIDE_SITE_CONFIG||{};var e=(c.contactEmail||"").trim();
-if(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){var s=document.getElementById("contact-slot");var a=document.createElement("a");a.href="mailto:"+e;a.textContent=e;s.appendChild(a);document.getElementById("contact-box").hidden=false;}})();
-</script>
+<h2>ماذا نفيدك أن تكتبي؟</h2>
+<ul><li>الصفحة أو القسم المقصود.</li><li>وصف المشكلة أو الاقتراح بإيجاز.</li><li>نوع الجهاز والمتصفح إن كانت المشكلة تقنية.</li></ul>
+<p class="disc">من فضلك لا ترسلي كلمات مرور أو أرقام بطاقات أو أي بيانات حساسة. نستخدم الاسم والبريد والرسالة للرد عليك فقط، وتجدين التفاصيل في <a href="/privacy/">سياسة الخصوصية</a>. قائمتك ومشترياتك لا تصلنا أبدًا عبر هذا النموذج.</p>
 <script src="/assets/js/contact.js" defer></script>
 </article>
 </main>
