@@ -1,0 +1,297 @@
+[
+ {
+  "name": "ميزانية موحدة 25000",
+  "ok": true,
+  "detail": "25000"
+ },
+ {
+  "name": "لا فئة قديمة في البيانات",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "لا ذكر لـ «أدوات المطبخ والرفايع» في صفحة الميزانية خارج إشعار الدمج",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "الرفايع مرة واحدة في بطاقات الميزانية",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "9 بطاقات فئات",
+  "ok": true,
+  "detail": "9"
+ },
+ {
+  "name": "تظهر ملاحظة التكلفة الجزئية",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "رقم الميزانية الإجمالية ظاهر",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "صفحة الرفايع تعرض بنودًا",
+  "ok": true,
+  "detail": "79"
+ },
+ {
+  "name": "مجموعات الرفايع بلا تكرار عناوين",
+  "ok": true,
+  "detail": "13"
+ },
+ {
+  "name": "الرابط القديم يفتح الرفايع",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "قائمة الفئات: الرفايع مرة واحدة ولا فئة قديمة",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ميزانية شهر العسل القديمة تظهر في الأرشيف",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ملاحظة أنها ليست ميزانية نشطة",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "ميزانية شهر العسل لا تظهر بصفحة الميزانية",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "الرئيسية والميزانية نفس تكلفة القائمة",
+  "ok": true,
+  "detail": "٥٬٤٧٣ ج.م* | ٥٬٤٧٣ ج.م"
+ },
+ {
+  "name": "تعديل سعر/كمية/شراء/ملاحظة/ميزانية",
+  "ok": true,
+  "detail": "[100, 3, 2, 'ملاحظة اختبار', 40000]"
+ },
+ {
+  "name": "تحديث الصفحة لا يعيد الجمع",
+  "ok": true,
+  "detail": "40000"
+ },
+ {
+  "name": "إضافة ثم حذف بند",
+  "ok": true,
+  "detail": "[418, 419, 418]"
+ },
+ {
+  "name": "نافذة تعديل الميزانية تفتح",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "مستخدمة جديدة: بلا فئة قديمة",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "مستخدمة جديدة: 9 فئات",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "لا أرشيف ولا صفر وهمي لدى الجديدة",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 375px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 390px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 430px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 768px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1366px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/dashboard",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/categories",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/category/cat-rafayea",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/budget",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/tips",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "بلا overflow أفقي 1920px #/settings",
+  "ok": true,
+  "detail": "0"
+ },
+ {
+  "name": "لا أخطاء Console/JS",
+  "ok": true,
+  "detail": "[]"
+ }
+]

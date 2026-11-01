@@ -1,0 +1,187 @@
+[
+  {
+    "name": "0) أساس: النسخة الأصلية = 419 بندًا (51 رفايع + 28 مطبخ)",
+    "ok": false,
+    "detail": "غير متساوٍ: [418,79,0] != [419,51,28]"
+  },
+  {
+    "name": "1) مستخدمة جديدة: فئة موحدة واحدة، 418 بندًا، بلا فئة مكررة",
+    "ok": true,
+    "detail": "9 فئات، 418 بندًا"
+  },
+  {
+    "name": "2) بيانات في الرفايع فقط (المستخدمة حذفت فئة المطبخ بنفسها)",
+    "ok": false,
+    "detail": "لا بنود مطبخ تُضاف لمن حذفتها: 79 != 51"
+  },
+  {
+    "name": "3) بيانات في الفئتين: كل البنود تنتقل للفئة الموحدة دون فقد",
+    "ok": false,
+    "detail": "الفرق بند التكرار فقط: 418 != 417"
+  },
+  {
+    "name": "4/5) ميزانية ميزانيتان: 15000 + 10000 = 25000",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية الرفايع فقط: 15000 + null = 15000",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية المطبخ فقط: null + 10000 = 10000",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية فارغتان: null + null = null",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية صفران: 0 + 0 = 0",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية صفر + قيمة: 0 + 10000 = 10000",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية صفر + فارغة: 0 + null = 0",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية فارغة + صفر: null + 0 = 0",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "4/5) ميزانية كسور: 100.25 + 50.5 = 150.75",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "6) شراء من الفئتين: الأسعار والكميات والمشتريات محفوظة",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "7) كميات معدلة يدويًا لا تُستبدل بكميات الكتالوج",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "8) بنود مضافة يدويًا تبقى (في الفئتين) وتنتقل مع فئة المطبخ",
+    "ok": false,
+    "detail": "غير متساوٍ: [\"cat-recovered\",\"صينية خاصة\",2,1,60,\"هدية\"] != [\"cat-rafayea\",\"صينية خاصة\",2,1,60,\"هدية\"]"
+  },
+  {
+    "name": "9) بنود حذفتها المستخدمة يدويًا لا تعود (بعد الترحيل ولا بعد إعادة الفتح)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "10) ملاحظات وأسعار: لا تضيع أي معلومة (مقارنة حقل بحقل)",
+    "ok": false,
+    "detail": "غير متساوٍ: 418 != 417"
+  },
+  {
+    "name": "11أ) تكرار: بند الكتالوج المكرر وحده يُدمج (كلاهما لم يُلمس) + مسار التتبع",
+    "ok": false,
+    "detail": ""
+  },
+  {
+    "name": "11ب) تكرار: بيانات على البند المكرر فقط → تُنسخ للأساسي (لا جمع)",
+    "ok": false,
+    "detail": "Cannot convert undefined or null to object"
+  },
+  {
+    "name": "11ج) تكرار: بيانات على الأساسي فقط → تبقى كما هي",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "11د) تكرار متعارض (بيانات على الاثنين): يبقى البندان ويُسجَّل التعارض",
+    "ok": false,
+    "detail": "Cannot convert undefined or null to object"
+  },
+  {
+    "name": "11هـ) تكرار: بند معدّل الاسم/منقول لفئة أخرى لا يُدمج",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'name')"
+  },
+  {
+    "name": "11و) تكرار: المستخدمة حذفت الأساسي → لا نلمس بند الآخر؛ حذفت المكرر → لا شيء",
+    "ok": false,
+    "detail": ""
+  },
+  {
+    "name": "11ز) الحالات غير المؤكدة (مفارش/مفرش نيش، فوط/فوطة مايكروفايبر) تبقى منفصلة",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "12) فتح الموقع 4 مرات: لا يتكرر الترحيل ولا تتضاعف الميزانية",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "12ب) النسخة الاحتياطية قبل v8 = البيانات الأصلية حرفيًا",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "13) استيراد نسخة احتياطية قديمة: دمج مرة واحدة دون فقد، ولا تعود المشكلة",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "14أ) بيانات تالفة: عناصر null وميزانيات غير صالحة لا تُسقط التطبيق ولا تُخمَّن",
+    "ok": false,
+    "detail": "Cannot read properties of null (reading 'id')"
+  },
+  {
+    "name": "14ب) ميزانية سالبة/نصية/غير رقمية في الفئتين → غير محددة + تسجيل",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "14ج) JSON تالف كليًا: لا انهيار، والنص الأصلي يُحفظ في نسخة .corrupt",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "14د) الفئة الأساسية محذوفة لدى المستخدمة: تُنشأ الفئة الموحدة وتنتقل البنود والميزانية",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "14هـ) فشل حفظ النسخة الاحتياطية (امتلاء المساحة): تُؤجَّل الترحيلة وتبقى البيانات سليمة",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "14و) فشل كتابة الحالة الجديدة: المخزَّن الأصلي سليم (لا حالة نصف محدّثة) وتُعاد المحاولة",
+    "ok": false,
+    "detail": "Cannot set properties of undefined (setting 'budget')"
+  },
+  {
+    "name": "14ز) رابط/معرّف الفئة القديمة يُحوَّل للموحدة",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "15) أرشيف شهر العسل (بنود + ميزانية) محفوظ عبر الترحيل",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "16) مستخدمة قبل v5 (ملف قديم جدًا): تحصل على فئة موحدة واحدة ولا تُنشأ فئة المطبخ",
+    "ok": true,
+    "detail": ""
+  }
+]
