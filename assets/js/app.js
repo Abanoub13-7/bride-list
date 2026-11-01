@@ -584,12 +584,11 @@
     const fmt = (k, v) => { const f = PU.fieldsFor(type).find(x => x.key === k); return f && f.kind === "date" ? (dateText(v) || v) : v; };
     const chips = Object.keys(r.details || {}).map(k => `<span class="pc-chip"><small>${esc(labelOf(k))}</small>${esc(fmt(k, r.details[k]))}</span>`).join("") + (r.custom || []).map(c => `<span class="pc-chip custom"><small>${esc(c.label)}</small>${esc(c.value)}</span>`).join("");
     const price = r.totalPrice === null || r.totalPrice === undefined ? `<span class="pc-price none">السعر غير مسجل</span>` : `<span class="pc-price"><b>${money(r.totalPrice)}</b>${unitP === null ? "" : ` <small>(${money(unitP)} للوحدة)</small>`}</span>`;
-    const img = r.hasImage ? (store.getPurchaseImage(r.id) ? `<img class="pc-img" src="${store.getPurchaseImage(r.id)}" alt="صورة العملية" loading="lazy">` : `<p class="muted pc-noimg">الصورة المرتبطة بهذه العملية غير متوفرة على هذا الجهاز.</p>`) : "";
     return `<article class="pc-card" data-pid="${esc(r.id)}">
       <header class="pc-head"><strong>عملية شراء ${n(num)}</strong><span class="pc-qty">${n(r.qty)} ${esc(it.unit)}</span>${price}</header>
       <p class="pc-meta">${r.date ? `<span>${esc(dateText(r.date))}</span>` : `<span class="muted">بدون تاريخ</span>`}${r.store ? `<span>${esc(r.store)}</span>` : ""}</p>
       ${chips ? `<div class="pc-chips">${chips}</div>` : ""}
-      ${r.notes ? `<p class="pc-notes">${esc(r.notes)}</p>` : ""}${img}
+      ${r.notes ? `<p class="pc-notes">${esc(r.notes)}</p>` : ""}
       <div class="pc-actions"><button type="button" class="outline-button" data-pedit="${esc(r.id)}">${ico("edit")} تعديل</button><button type="button" class="outline-button danger" data-pdel="${esc(r.id)}">${ico("trash")} حذف</button></div>
     </article>`;
   }
@@ -611,7 +610,7 @@
   function closePurchaseLog() { $("purchaseLogDialog").close(); logItemId = ""; render(); }
 
   /* ---------- نافذة تسجيل/تعديل عملية شراء ---------- */
-  const pd = { itemId: "", id: "", details: {}, custom: [], customSeq: 0, image: { dataUrl: null, remove: false, had: false }, typeKey: "general" };
+  const pd = { itemId: "", id: "", details: {}, custom: [], customSeq: 0, typeKey: "general" };
   function pdFieldHtml(f, value) {
     const id = `pdf-${f.key}`, v = esc(value || "");
     const input = f.kind === "select" ? `<select id="${id}" data-dkey="${f.key}"><option value="">—</option>${f.options.map(o => `<option ${o === value ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`
@@ -642,10 +641,6 @@
     else if (!Number.isInteger(q) || q < 1) box.textContent = "اكتبي كمية صحيحة علشان نحسب سعر الوحدة.";
     else box.textContent = Number(t) === 0 ? "السعر مسجل صفرًا (سعر الوحدة 0)." : `سعر الوحدة = ${money(Math.round((Number(t) / q) * 100) / 100)} (محسوب تلقائيًا)`;
   }
-  function pdImage(dataUrl) {
-    const img = $("pdImgPreview"); img.hidden = !dataUrl; if (dataUrl) img.src = dataUrl;
-    $("pdImgRemove").hidden = !dataUrl;
-  }
   function pdError(msg) { const el = $("pdError"); el.textContent = msg || ""; el.hidden = !msg; if (msg) el.scrollIntoView({ block: "nearest" }); }
   function openPurchaseDialog(itemId, purchaseId = "") {
     const it = itemById(itemId); if (!it) return;
@@ -654,7 +649,7 @@
     if (purchaseId && !rec) return;
     if (!rec && sm.remainingQty <= 0) { const msg = "الكمية المطلوبة من هذا البند اتسجلت كلها. لو اشتريتِ أكثر، عدّلي «الكمية المطلوبة» الأول."; if (dlgOpen("purchaseLogDialog")) plMessage(msg, "err"); else toast(msg, 4200); return; }
     $("purchaseForm").reset(); pdError("");
-    Object.assign(pd, { itemId, id: purchaseId, details: rec ? { ...(rec.details || {}) } : {}, custom: rec ? (rec.custom || []).map(c => ({ ...c })) : [], customSeq: 0, image: { dataUrl: null, remove: false, had: !!(rec && rec.hasImage) }, typeKey: rec ? (rec.type || "general") : PU.resolveType(it, cat) });
+    Object.assign(pd, { itemId, id: purchaseId, details: rec ? { ...(rec.details || {}) } : {}, custom: rec ? (rec.custom || []).map(c => ({ ...c })) : [], customSeq: 0, typeKey: rec ? (rec.type || "general") : PU.resolveType(it, cat) });
     $("pdItemId").value = itemId; $("pdId").value = purchaseId; $("pdItemName").textContent = it.name;
     $("pdTitle").textContent = rec ? "تعديل عملية شراء" : "تسجيل شراء";
     $("savePurchase").textContent = rec ? "حفظ التعديل" : "حفظ العملية";
@@ -668,26 +663,12 @@
     if (!PU.TYPES[pd.typeKey]) $("pdType").insertAdjacentHTML("beforeend", `<option value="${esc(pd.typeKey)}">${esc(pd.typeKey)}</option>`);
     $("pdType").value = pd.typeKey;
     pdRenderFields(); pdRenderCustom();
-    $("pdCustomBox").open = pd.custom.length > 0; $("pdMoreBox").open = !!(rec && (rec.notes || rec.hasImage));
+    $("pdCustomBox").open = pd.custom.length > 0; $("pdMoreBox").open = !!(rec && rec.notes);
     $("pdDetailsBox").open = true;
-    pdImage(rec && rec.hasImage ? store.getPurchaseImage(rec.id) : null);
     pdUpdateUnit();
     $("purchaseDialog").showModal(); $("pdQty").focus();
   }
   function closePurchaseDialog() { $("purchaseDialog").close(); }
-  async function handlePurchaseImage(file) {
-    if (!file) return;
-    const hint = $("pdImgHint");
-    if (!IMG_TYPES.includes(file.type)) { hint.textContent = "نوع الملف غير مدعوم. اختاري صورة JPG أو PNG أو WebP فقط. الصورة الحالية ما اتغيرتش."; hint.classList.add("err"); return; }
-    if (file.size > IMG_MAX_BYTES) { hint.textContent = "حجم الصورة كبير جدًا (الحد الأقصى ٨ ميجا). اختاري صورة أصغر."; hint.classList.add("err"); return; }
-    try {
-      hint.textContent = "بنجهز الصورة..."; hint.classList.remove("err");
-      const dataUrl = await compressImage(file, 240 * 1024, [[900, .72], [720, .65], [600, .6], [480, .55], [360, .5]]);
-      pd.image = { dataUrl, remove: false, had: pd.image.had }; pdImage(dataUrl);
-      hint.textContent = "الصورة جاهزة وهتتحفظ مع العملية على جهازك فقط.";
-    } catch (error) { hint.textContent = (error.message || "تعذر قراءة الصورة.") + " الصورة الحالية ما اتغيرتش."; hint.classList.add("err"); }
-    finally { $("pdImgInput").value = ""; }
-  }
   function handlePurchaseSubmit(event) {
     event.preventDefault(); pdError("");
     pdCaptureDetails(); pdCaptureCustom();
@@ -696,14 +677,9 @@
     let saved;
     try { saved = pd.id ? store.updatePurchase(pd.itemId, pd.id, data) : store.addPurchase(pd.itemId, data); }
     catch (error) { pdError(error.message || "حصلت مشكلة أثناء الحفظ."); return; }
-    let imageNote = "";
-    try {
-      if (pd.image.dataUrl) store.setPurchaseImage(pd.itemId, saved.id, pd.image.dataUrl);
-      else if (pd.image.remove && pd.image.had) store.clearPurchaseImage(pd.itemId, saved.id);
-    } catch (error) { imageNote = ` ${error.message || "تعذر حفظ الصورة."}`; }
     closePurchaseDialog(); render();
-    const msg = (pd.id ? "تم تعديل عملية الشراء." : "تم تسجيل عملية الشراء.") + imageNote;
-    if (dlgOpen("purchaseLogDialog")) { renderPurchaseLog(); plMessage(msg, imageNote ? "warn" : "ok"); } else toast(msg, imageNote ? 6500 : 2800);
+    const msg = pd.id ? "تم تعديل عملية الشراء." : "تم تسجيل عملية الشراء.";
+    if (dlgOpen("purchaseLogDialog")) { renderPurchaseLog(); plMessage(msg, "ok"); } else toast(msg, 2800);
   }
   function bindPurchases() {
     $("closePurchaseLog").addEventListener("click", closePurchaseLog);
@@ -727,8 +703,6 @@
     $("pdType").addEventListener("change", () => { pdCaptureDetails(); pd.typeKey = $("pdType").value; pdRenderFields(); });
     $("pdAddCustom").addEventListener("click", () => { pdCaptureCustom(); pd.custom.push({ id: `cf-${Date.now().toString(36)}-${++pd.customSeq}`, label: "", value: "" }); pdRenderCustom(); $("pdCustomBox").open = true; const last = $("pdCustomList").querySelector(".pd-crow:last-child [data-clabel]"); if (last) last.focus(); });
     $("pdCustomList").addEventListener("click", e => { const d = e.target.closest("[data-cdel]"); if (!d) return; pdCaptureCustom(); pd.custom = pd.custom.filter(c => c.id !== d.dataset.cdel); pdRenderCustom(); });
-    $("pdImgInput").addEventListener("change", e => handlePurchaseImage(e.target.files && e.target.files[0]));
-    $("pdImgRemove").addEventListener("click", () => { pd.image = { dataUrl: null, remove: true, had: pd.image.had }; pdImage(null); $("pdImgHint").textContent = "هتتحذف الصورة عند حفظ العملية."; $("pdImgHint").classList.remove("err"); });
   }
 
   /* ---------- صورة يومك الجميل ---------- */
